@@ -1,5 +1,6 @@
 package main
 
+import "reflect"
 import "testing"
 
 var fibATests = []struct {
@@ -51,5 +52,69 @@ func TestP002A(t *testing.T) {
 		if actual != tt.expected {
 			t.Errorf("Expected %d but got %d", tt.expected, actual)
 		}
+	}
+}
+
+var fibBTests = []struct {
+	input    []int
+	expected []int
+}{
+	{input: []int{1, 2, 1}, expected: []int{0, 1}},
+	{input: []int{1, 2, 2}, expected: []int{0, 1, 2}},
+	{input: []int{1, 2, 3}, expected: []int{0, 1, 2, 3}},
+	{input: []int{1, 2, 4}, expected: []int{0, 1, 2, 3}},
+	{input: []int{1, 2, 5}, expected: []int{0, 1, 2, 3, 5}},
+	{input: []int{1, 2, 6}, expected: []int{0, 1, 2, 3, 5}},
+	{input: []int{1, 2, 7}, expected: []int{0, 1, 2, 3, 5}},
+	{input: []int{1, 2, 8}, expected: []int{0, 1, 2, 3, 5, 8}},
+	{input: []int{1, 2, 9}, expected: []int{0, 1, 2, 3, 5, 8}},
+	{input: []int{1, 2, 10}, expected: []int{0, 1, 2, 3, 5, 8}},
+}
+
+func TestFibB(t *testing.T) {
+	for _, tt := range fibBTests {
+		actual := fibB(tt.input[0], tt.input[1], tt.input[2])
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("Expected %d but got %d", tt.expected, actual)
+		}
+	}
+}
+
+func TestP002B(t *testing.T) {
+	for _, tt := range p002Tests {
+		actual := p002B(tt.input)
+		if actual != tt.expected {
+			t.Errorf("Expected %d but got %d", tt.expected, actual)
+		}
+	}
+}
+
+func TestP002C(t *testing.T) {
+	for _, tt := range p002Tests {
+		actual := p002B(tt.input)
+		if actual != tt.expected {
+			t.Errorf("Expected %d but got %d", tt.expected, actual)
+		}
+	}
+}
+
+func BenchmarkP002A(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		p002A(i)
+	}
+}
+
+func BenchmarkP002B(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		p002B(i)
+	}
+}
+
+func BenchmarkP002C(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		p002C(i)
 	}
 }

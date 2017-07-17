@@ -16,6 +16,8 @@ const max = 4000000
 // exceed four million, find the sum of the even-valued terms.
 func main() {
 	fmt.Printf("P002A: %d\n", p002A(max))
+	fmt.Printf("P002B: %d\n", p002B(max))
+	fmt.Printf("P002C: %d\n", p002C(max))
 }
 
 // フィボナッチ数列の第n項を取得する関数を定義してやる
@@ -39,4 +41,65 @@ func fibA(a0, a1, n int) int {
 	}
 
 	return fibA(a0, a1, n-1) + fibA(a0, a1, n-2)
+}
+
+// フィボナッチ数列をあらかじめ生成しておいてから足す
+func p002B(max int) int {
+	fibs := fibB(1, 2, max)
+	if len(fibs) < 2 {
+		return 0
+	}
+
+	sum := 0
+	for i := 2; i < len(fibs); i += 2 {
+		sum += fibs[i]
+	}
+
+	return sum
+}
+
+func fibB(a0, a1, max int) []int {
+	fibs := []int{0} // 初項の0はインデックスをずらすためのダミー
+	if a0 > max {
+		return fibs
+	}
+	fibs = append(fibs, a0)
+
+	if a1 > max {
+		return fibs
+	}
+	fibs = append(fibs, a1)
+
+	n := a1
+	f := a0 + a1
+	for f <= max {
+		fibs = append(fibs, f)
+		n, f = f, f+n
+	}
+
+	return fibs
+}
+
+// フィボナッチ数列を生成しながら足す
+func p002C(max int) int {
+	if max < 1 {
+		return 0
+	}
+	if max < 2 {
+		return 1
+	}
+
+	a0, a1 := 1, 2
+	sum := 0
+	add := true
+	for a1 <= max {
+		if add {
+			sum += a1
+		}
+
+		a0, a1 = a1, a0+a1
+		add = !add
+	}
+
+	return sum
 }
