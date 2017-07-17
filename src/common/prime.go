@@ -1,0 +1,59 @@
+package common
+
+// http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借しているので
+// テストは省略
+
+// PrimeGenerator : 無限素数ジェネレータ
+type PrimeGenerator struct {
+	ch chan uint64
+}
+
+// NewPrimeGenerator : PrimeGeneratorコンストラクタ
+func NewPrimeGenerator() *PrimeGenerator {
+	gen := PrimeGenerator{
+		ch: make(chan uint64),
+	}
+
+	go gen.start()
+
+	return &gen
+}
+
+func (g *PrimeGenerator) start() {
+	// Key   元の素数の奇数倍
+	// Value 元の素数の2倍
+	multiples := map[uint64]uint64{}
+
+	// 2は例外
+	g.ch <- 2
+
+	// 3以上の奇数で素数を探す
+	for n := uint64(3); ; n += 2 {
+		factor, ok := multiples[n]
+
+		// factorがあるなら、nはfactor/2の倍数なので素数ではない
+		if ok {
+			delete(multiples, n)
+		} else {
+			// 後に追加する倍数を奇数に限定するための調整
+			factor = n * 2
+		}
+
+		// 新たな倍数を追加
+		for newN := n + factor; ; newN += factor {
+			if _, ok := multiples[newN]; !ok {
+				multiples[newN] = factor
+				break
+			}
+		}
+
+		if !ok {
+			g.ch <- n
+		}
+	}
+}
+
+// Next : 次の素数を取得する
+func (g *PrimeGenerator) Next() uint64 {
+	return <-g.ch
+}
