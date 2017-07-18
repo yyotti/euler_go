@@ -13,6 +13,9 @@ const num = 600851475143
 // What is the largest prime factor of the number 600851475143 ?
 func main() {
 	fmt.Printf("P003A: %d\n", p003A(num))
+	fmt.Printf("P003B: %d\n", p003B(num))
+	fmt.Printf("P003C: %d\n", p003C(num))
+	fmt.Printf("P003D: %d\n", p003D(num))
 }
 
 // メモ化

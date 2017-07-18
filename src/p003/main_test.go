@@ -119,28 +119,28 @@ func TestP003D(t *testing.T) {
 
 func BenchmarkP003A(b *testing.B) {
 	b.ResetTimer()
-	for i := uint64(0); i < uint64(b.N); i++ {
-		p003A(i)
+	for i := 0; i < b.N; i++ {
+		p003A(997009) // 997*997
 	}
 }
 
 func BenchmarkP003B(b *testing.B) {
 	b.ResetTimer()
-	for i := uint64(0); i < uint64(b.N); i++ {
-		p003B(i)
+	for i := 0; i < b.N; i++ {
+		p003B(997009) // 997*997
 	}
 }
 
 func BenchmarkP003C(b *testing.B) {
 	b.ResetTimer()
-	for i := uint64(0); i < uint64(b.N); i++ {
-		p003C(i)
+	for i := 0; i < b.N; i++ {
+		p003C(997009) // 997*997
 	}
 }
 
 func BenchmarkP003D(b *testing.B) {
 	b.ResetTimer()
-	for i := uint64(0); i < uint64(b.N); i++ {
-		p003D(i)
+	for i := 0; i < b.N; i++ {
+		p003D(997009) // 997*997
 	}
 }

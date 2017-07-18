@@ -63,20 +63,20 @@ func TestP001Z(t *testing.T) {
 func BenchmarkP001A(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p001A(i, []int{3, 5})
+		p001A(10000, []int{3, 5})
 	}
 }
 
 func BenchmarkP001B(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p001B(i, []int{3, 5})
+		p001B(10000, []int{3, 5})
 	}
 }
 
 func BenchmarkP001Z(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p001Z(i)
+		p001Z(10000)
 	}
 }

@@ -101,20 +101,20 @@ func TestP002C(t *testing.T) {
 func BenchmarkP002A(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p002A(i)
+		p002A(10000)
 	}
 }
 
 func BenchmarkP002B(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p002B(i)
+		p002B(10000)
 	}
 }
 
 func BenchmarkP002C(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p002C(i)
+		p002C(10000)
 	}
 }
