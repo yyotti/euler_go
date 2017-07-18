@@ -1,5 +1,9 @@
 package common
 
+import (
+	"math"
+)
+
 // http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借しているので
 // テストは省略
 
@@ -56,4 +60,33 @@ func (g *PrimeGenerator) start() {
 // Next : 次の素数を取得する
 func (g *PrimeGenerator) Next() uint64 {
 	return <-g.ch
+}
+
+// PrimeFactors : 素因数分解
+func PrimeFactors(n uint64) map[uint64]int {
+	pCounts := map[uint64]int{}
+	if n < 2 {
+		return pCounts
+	}
+
+	gen := NewPrimeGenerator()
+	k := n
+	for i := gen.Next(); float64(i) <= math.Sqrt(float64(n)); i = gen.Next() {
+		for k%i == 0 {
+			cnt, ok := pCounts[i]
+			if ok {
+				pCounts[i] = cnt + 1
+			} else {
+				pCounts[i] = 1
+			}
+
+			k /= i
+		}
+	}
+
+	if k != 1 {
+		pCounts[k] = 1
+	}
+
+	return pCounts
 }

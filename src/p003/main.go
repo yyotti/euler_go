@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/yyotti/euler_go/src/common"
 	"math"
+
+	"github.com/yyotti/euler_go/src/common"
 )
 
 const num = 600851475143
@@ -90,7 +91,7 @@ func primeFactors(n uint64) map[uint64]int {
 // p003Aの素因数分解を無限素数ジェネレータを使ってやる
 func p003B(n uint64) uint64 {
 	// 実装はp003Aと同じ
-	pf := primeFactors(n)
+	pf := common.PrimeFactors(n)
 
 	max := uint64(1)
 	for p := range pf {
@@ -100,34 +101,6 @@ func p003B(n uint64) uint64 {
 	}
 
 	return max
-}
-
-func primeFactorsGen(n uint64) map[uint64]int {
-	pCounts := map[uint64]int{}
-	if n < 2 {
-		return pCounts
-	}
-
-	gen := common.NewPrimeGenerator()
-	k := n
-	for i := gen.Next(); float64(i) <= math.Sqrt(float64(n)); i = gen.Next() {
-		for k%i == 0 {
-			cnt, ok := pCounts[i]
-			if ok {
-				pCounts[i] = cnt + 1
-			} else {
-				pCounts[i] = 1
-			}
-
-			k /= i
-		}
-	}
-
-	if k != 1 {
-		pCounts[k] = 1
-	}
-
-	return pCounts
 }
 
 // 素因数分解はせずに、nを割り切れる最大の素数を探す

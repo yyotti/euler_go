@@ -58,15 +58,6 @@ func TestPrimeFactors(t *testing.T) {
 	}
 }
 
-func TestPrimeFactorsGen(t *testing.T) {
-	for _, tt := range primeFactorsTests {
-		actual := primeFactorsGen(tt.input)
-		if !reflect.DeepEqual(actual, tt.expected) {
-			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
-		}
-	}
-}
-
 var p003Tests = []struct {
 	input    uint64
 	expected uint64
