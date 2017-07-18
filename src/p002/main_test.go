@@ -36,14 +36,14 @@ var p002Tests = []struct {
 	{input: 2, expected: 2},
 	{input: 3, expected: 2},
 	{input: 4, expected: 2},
-	{input: 5, expected: 2 + 5},
-	{input: 6, expected: 2 + 5},
-	{input: 7, expected: 2 + 5},
-	{input: 8, expected: 2 + 5},
-	{input: 9, expected: 2 + 5},
-	{input: 10, expected: 2 + 5},
-	{input: 20, expected: 2 + 5 + 13},
-	{input: 100, expected: 2 + 5 + 13 + 34 + 89},
+	{input: 5, expected: 2},
+	{input: 6, expected: 2},
+	{input: 7, expected: 2},
+	{input: 8, expected: 2 + 8},
+	{input: 9, expected: 2 + 8},
+	{input: 10, expected: 2 + 8},
+	{input: 100, expected: 2 + 8 + 34},
+	{input: 1000, expected: 2 + 8 + 34 + 144 + 610},
 }
 
 func TestP002A(t *testing.T) {
@@ -91,7 +91,7 @@ func TestP002B(t *testing.T) {
 
 func TestP002C(t *testing.T) {
 	for _, tt := range p002Tests {
-		actual := p002B(tt.input)
+		actual := p002C(tt.input)
 		if actual != tt.expected {
 			t.Errorf("Expected %d but got %d", tt.expected, actual)
 		}

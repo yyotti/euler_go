@@ -25,10 +25,14 @@ func main() {
 func p002A(max int) int {
 	sum := 0
 
-	i := 2
-	for f := fibA(1, 2, i); f <= max; f = fibA(1, 2, i) {
-		sum += f
-		i += 2
+	for i := 1; ; i++ {
+		f := fibA(1, 2, i)
+		if f > max {
+			break
+		}
+		if f%2 == 0 {
+			sum += f
+		}
 	}
 
 	return sum
@@ -52,8 +56,10 @@ func p002B(max int) int {
 	}
 
 	sum := 0
-	for i := 2; i < len(fibs); i += 2 {
-		sum += fibs[i]
+	for _, f := range fibs {
+		if f%2 == 0 {
+			sum += f
+		}
 	}
 
 	return sum
@@ -83,23 +89,15 @@ func fibB(a0, a1, max int) []int {
 
 // フィボナッチ数列を生成しながら足す
 func p002C(max int) int {
-	if max < 1 {
+	if max < 2 {
 		return 0
 	}
-	if max < 2 {
-		return 1
-	}
 
-	a0, a1 := 1, 2
 	sum := 0
-	add := true
-	for a1 <= max {
-		if add {
-			sum += a1
+	for a, f := 1, 2; f <= max; a, f = f, a+f {
+		if f%2 == 0 {
+			sum += f
 		}
-
-		a0, a1 = a1, a0+a1
-		add = !add
 	}
 
 	return sum
@@ -142,8 +140,8 @@ func p002D(max int) int {
 	gen := newFibonacciGenerator(1, 2)
 
 	sum := 0
-	for f, add := gen.Next(), false; f <= max; f, add = gen.Next(), !add {
-		if add {
+	for f := gen.Next(); f <= max; f = gen.Next() {
+		if f%2 == 0 {
 			sum += f
 		}
 	}
