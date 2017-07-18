@@ -174,3 +174,14 @@ func BenchmarkP004E_4(b *testing.B) {
 		p004E(4)
 	}
 }
+
+func ExampleP004() {
+	main()
+
+	// Output:
+	// P004A: 906609
+	// P004B: 906609
+	// P004C: 906609
+	// P004D: 906609
+	// P004E: 906609
+}

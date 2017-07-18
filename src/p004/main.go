@@ -6,16 +6,18 @@ import (
 	"strconv"
 )
 
+const digitCount = 3
+
 // A palindromic number reads the same both ways. The largest palindrome made
 // from the product of two 2-digit numbers is 9009 = 91 × 99.
 //
 // Find the largest palindrome made from the product of two 3-digit numbers.
 func main() {
-	fmt.Printf("P004A: %d\n", p004A(3))
-	fmt.Printf("P004B: %d\n", p004B(3))
-	fmt.Printf("P004C: %d\n", p004C(3))
-	fmt.Printf("P004D: %d\n", p004D(3))
-	fmt.Printf("P004E: %d\n", p004E(3))
+	fmt.Printf("P004A: %d\n", p004A(digitCount))
+	fmt.Printf("P004B: %d\n", p004B(digitCount))
+	fmt.Printf("P004C: %d\n", p004C(digitCount))
+	fmt.Printf("P004D: %d\n", p004D(digitCount))
+	fmt.Printf("P004E: %d\n", p004E(digitCount))
 }
 
 // 指定された桁数の数同士を掛け合わせて、回文数になるものの最大値を得る

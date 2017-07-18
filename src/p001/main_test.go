@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 type p001Input struct {
 	max int
@@ -79,4 +81,13 @@ func BenchmarkP001Z(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		p001Z(10000)
 	}
+}
+
+func ExampleP001() {
+	main()
+
+	// Output:
+	// P001A: 233168
+	// P001B: 233168
+	// P001Z: 233168
 }

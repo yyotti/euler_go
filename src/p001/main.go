@@ -4,15 +4,17 @@ import (
 	"fmt"
 )
 
+const max = 1000
+
 // P001
 // If we list all the natural numbers below 10 that are multiples of 3 or 5,
 // we get 3, 5, 6 and 9. The sum of these multiples is 23.
 //
 // Find the sum of all the multiples of 3 or 5 below 1000.
 func main() {
-	fmt.Printf("P001A: %d\n", p001A(1000, []int{3, 5}))
-	fmt.Printf("P001B: %d\n", p001B(1000, []int{3, 5}))
-	fmt.Printf("P001Z: %d\n", p001Z(1000))
+	fmt.Printf("P001A: %d\n", p001A(max, []int{3, 5}))
+	fmt.Printf("P001B: %d\n", p001B(max, []int{3, 5}))
+	fmt.Printf("P001Z: %d\n", p001Z(max))
 }
 
 // 素直にやる

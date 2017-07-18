@@ -204,3 +204,13 @@ func BenchmarkP002D(b *testing.B) {
 		p002D(10000)
 	}
 }
+
+func ExampleP002() {
+	main()
+
+	// Output:
+	// P002A: 4613732
+	// P002B: 4613732
+	// P002C: 4613732
+	// P002D: 4613732
+}
