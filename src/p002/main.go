@@ -18,6 +18,7 @@ func main() {
 	fmt.Printf("P002A: %d\n", p002A(max))
 	fmt.Printf("P002B: %d\n", p002B(max))
 	fmt.Printf("P002C: %d\n", p002C(max))
+	fmt.Printf("P002D: %d\n", p002D(max))
 }
 
 // フィボナッチ数列の第n項を取得する関数を定義してやる
@@ -99,6 +100,52 @@ func p002C(max int) int {
 
 		a0, a1 = a1, a0+a1
 		add = !add
+	}
+
+	return sum
+}
+
+// フィボナッチ数列ジェネレータ
+type fibonacciGenerator struct {
+	a1 int
+	a2 int
+	ch chan int
+}
+
+func newFibonacciGenerator(a1, a2 int) *fibonacciGenerator {
+	gen := fibonacciGenerator{
+		a1: a1,
+		a2: a2,
+		ch: make(chan int),
+	}
+
+	go gen.start()
+
+	return &gen
+}
+
+func (g *fibonacciGenerator) start() {
+	g.ch <- g.a1
+	g.ch <- g.a2
+
+	for fib1, fib2 := g.a1, g.a2; ; fib1, fib2 = fib2, fib1+fib2 {
+		g.ch <- fib1 + fib2
+	}
+}
+
+func (g *fibonacciGenerator) Next() int {
+	return <-g.ch
+}
+
+// フィボナッチ数列ジェネレータを使って足していく
+func p002D(max int) int {
+	gen := newFibonacciGenerator(1, 2)
+
+	sum := 0
+	for f, add := gen.Next(), false; f <= max; f, add = gen.Next(), !add {
+		if add {
+			sum += f
+		}
 	}
 
 	return sum
