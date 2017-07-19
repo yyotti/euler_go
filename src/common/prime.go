@@ -4,10 +4,8 @@ import (
 	"math"
 )
 
-// http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借しているので
-// テストは省略
-
 // PrimeGenerator : 無限素数ジェネレータ
+// http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借
 type PrimeGenerator struct {
 	ch chan uint
 }

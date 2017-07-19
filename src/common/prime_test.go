@@ -5,6 +5,49 @@ import (
 	"testing"
 )
 
+func TestNewPrimeGenerator(t *testing.T) {
+	actual := NewPrimeGenerator()
+	if actual == nil {
+		t.Errorf("Fibonacci generator is nil")
+	}
+	if actual.ch == nil {
+		t.Errorf("ch is nil")
+	}
+}
+
+func TestPrimeGenerator_start(t *testing.T) {
+	gen := &PrimeGenerator{ch: make(chan uint)}
+	go gen.start()
+	for _, expected := range []uint{2, 3, 5, 7} {
+		actual := <-gen.ch
+		if actual != expected {
+			t.Errorf("Expected %d but got %d", expected, actual)
+			break
+		}
+	}
+}
+
+func TestPrimeGenerator_Next(t *testing.T) {
+	gen := &PrimeGenerator{ch: make(chan uint)}
+	go gen.start()
+	for _, expected := range []uint{2, 3, 5, 7} {
+		actual := gen.Next()
+		if actual != expected {
+			t.Errorf("Expected %d but got %d", expected, actual)
+			break
+		}
+	}
+}
+
+func BenchmarkPrimeGenerator(b *testing.B) {
+	gen := &PrimeGenerator{ch: make(chan uint)}
+	go gen.start()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		gen.Next()
+	}
+}
+
 var primeFactorsTests = []struct {
 	input    uint
 	expected map[uint]uint
