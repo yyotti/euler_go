@@ -6,7 +6,7 @@ import (
 )
 
 var uint64pIsPrimeTests = []struct {
-	input    uint64p
+	input    uintp
 	expected bool
 }{
 	{input: 0, expected: false},
@@ -33,20 +33,20 @@ func TestUint64p_isPrime(t *testing.T) {
 }
 
 var primeFactorsTests = []struct {
-	input    uint64
-	expected map[uint64]int
+	input    uint
+	expected map[uint]uint
 }{
-	{input: 0, expected: map[uint64]int{}},
-	{input: 1, expected: map[uint64]int{}},
-	{input: 2, expected: map[uint64]int{2: 1}},
-	{input: 3, expected: map[uint64]int{3: 1}},
-	{input: 4, expected: map[uint64]int{2: 2}},
-	{input: 5, expected: map[uint64]int{5: 1}},
-	{input: 6, expected: map[uint64]int{2: 1, 3: 1}},
-	{input: 7, expected: map[uint64]int{7: 1}},
-	{input: 8, expected: map[uint64]int{2: 3}},
-	{input: 9, expected: map[uint64]int{3: 2}},
-	{input: 13195, expected: map[uint64]int{5: 1, 7: 1, 13: 1, 29: 1}},
+	{input: 0, expected: map[uint]uint{}},
+	{input: 1, expected: map[uint]uint{}},
+	{input: 2, expected: map[uint]uint{2: 1}},
+	{input: 3, expected: map[uint]uint{3: 1}},
+	{input: 4, expected: map[uint]uint{2: 2}},
+	{input: 5, expected: map[uint]uint{5: 1}},
+	{input: 6, expected: map[uint]uint{2: 1, 3: 1}},
+	{input: 7, expected: map[uint]uint{7: 1}},
+	{input: 8, expected: map[uint]uint{2: 3}},
+	{input: 9, expected: map[uint]uint{3: 2}},
+	{input: 13195, expected: map[uint]uint{5: 1, 7: 1, 13: 1, 29: 1}},
 }
 
 func TestPrimeFactors(t *testing.T) {
@@ -59,8 +59,8 @@ func TestPrimeFactors(t *testing.T) {
 }
 
 var p003Tests = []struct {
-	input    uint64
-	expected uint64
+	input    uint
+	expected uint
 }{
 	{input: 0, expected: 1},
 	{input: 1, expected: 1},

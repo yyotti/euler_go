@@ -9,13 +9,13 @@ import (
 
 // PrimeGenerator : 無限素数ジェネレータ
 type PrimeGenerator struct {
-	ch chan uint64
+	ch chan uint
 }
 
 // NewPrimeGenerator : PrimeGeneratorコンストラクタ
 func NewPrimeGenerator() *PrimeGenerator {
 	gen := PrimeGenerator{
-		ch: make(chan uint64),
+		ch: make(chan uint),
 	}
 
 	go gen.start()
@@ -26,13 +26,13 @@ func NewPrimeGenerator() *PrimeGenerator {
 func (g *PrimeGenerator) start() {
 	// Key   元の素数の奇数倍
 	// Value 元の素数の2倍
-	multiples := map[uint64]uint64{}
+	multiples := map[uint]uint{}
 
 	// 2は例外
 	g.ch <- 2
 
 	// 3以上の奇数で素数を探す
-	for n := uint64(3); ; n += 2 {
+	for n := uint(3); ; n += 2 {
 		factor, ok := multiples[n]
 
 		// factorがあるなら、nはfactor/2の倍数なので素数ではない
@@ -58,13 +58,13 @@ func (g *PrimeGenerator) start() {
 }
 
 // Next : 次の素数を取得する
-func (g *PrimeGenerator) Next() uint64 {
+func (g *PrimeGenerator) Next() uint {
 	return <-g.ch
 }
 
 // PrimeFactors : 素因数分解
-func PrimeFactors(n uint64) map[uint64]int {
-	pCounts := map[uint64]int{}
+func PrimeFactors(n uint) map[uint]uint {
+	pCounts := map[uint]uint{}
 	if n < 2 {
 		return pCounts
 	}

@@ -3,10 +3,9 @@ package main
 import "testing"
 
 var isParindromeTests = []struct {
-	input    int
+	input    uint
 	expected bool
 }{
-	{input: -1, expected: false},
 	{input: 0, expected: true},
 	{input: 1, expected: true},
 	{input: 9, expected: true},
@@ -47,10 +46,10 @@ func TestIsParindromeB(t *testing.T) {
 }
 
 var p004Tests = []struct {
-	input    int
-	expected int
+	input    uint
+	expected uint
 }{
-	{input: 0, expected: -1},
+	{input: 0, expected: 0},
 	{input: 1, expected: 9},
 	{input: 2, expected: 9009},
 }
@@ -94,14 +93,14 @@ func TestP004D(t *testing.T) {
 func BenchmarkIsParindromeA(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		isParindromeA(i)
+		isParindromeA(432101234)
 	}
 }
 
 func BenchmarkIsParindromeB(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		isParindromeB(i)
+		isParindromeB(432101234)
 	}
 }
 

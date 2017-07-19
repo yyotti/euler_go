@@ -19,14 +19,14 @@ func main() {
 }
 
 // 1からmaxまでを素因数分解し、その結果出てきた素因数を全て掛け合わせる
-func p005A(max int) uint64 {
+func p005A(max uint) uint {
 	if max < 1 {
 		return 0
 	}
 
-	pf := map[uint64]int{}
-	for i := 1; i <= max; i++ {
-		for n, c := range common.PrimeFactors(uint64(i)) {
+	pf := map[uint]uint{}
+	for i := uint(1); i <= max; i++ {
+		for n, c := range common.PrimeFactors(i) {
 			cnt, ok := pf[n]
 			if !ok || cnt < c {
 				pf[n] = c
@@ -34,9 +34,9 @@ func p005A(max int) uint64 {
 		}
 	}
 
-	p := uint64(1)
+	p := uint(1)
 	for n, c := range pf {
-		for i := 0; i < c; i++ {
+		for i := uint(0); i < c; i++ {
 			p *= n
 		}
 	}
@@ -45,7 +45,7 @@ func p005A(max int) uint64 {
 }
 
 // 1からmaxまでの最小公倍数を計算する
-func p005B(max int) uint64 {
+func p005B(max uint) uint {
 	if max < 1 {
 		return 0
 	}
@@ -55,5 +55,5 @@ func p005B(max int) uint64 {
 		lcm = common.Lcm(lcm, i)
 	}
 
-	return uint64(lcm)
+	return lcm
 }

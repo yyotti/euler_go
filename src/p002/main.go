@@ -22,11 +22,11 @@ func main() {
 }
 
 // フィボナッチ数列の第n項を取得する関数を定義してやる
-func p002A(max int) int {
-	sum := 0
+func p002A(max uint) uint {
+	sum := uint(0)
 
-	for i := 1; ; i++ {
-		f := fibA(1, 2, i)
+	for i := uint(1); ; i++ {
+		f := fibA(i)
 		if f > max {
 			break
 		}
@@ -38,24 +38,24 @@ func p002A(max int) int {
 	return sum
 }
 
-func fibA(a0, a1, n int) int {
+func fibA(n uint) uint {
 	if n == 1 {
-		return a0
+		return 1
 	} else if n == 2 {
-		return a1
+		return 2
 	}
 
-	return fibA(a0, a1, n-1) + fibA(a0, a1, n-2)
+	return fibA(n-1) + fibA(n-2)
 }
 
 // フィボナッチ数列をあらかじめ生成しておいてから足す
-func p002B(max int) int {
-	fibs := fibB(1, 2, max)
+func p002B(max uint) uint {
+	fibs := fibB(max)
 	if len(fibs) < 2 {
 		return 0
 	}
 
-	sum := 0
+	sum := uint(0)
 	for _, f := range fibs {
 		if f%2 == 0 {
 			sum += f
@@ -65,36 +65,34 @@ func p002B(max int) int {
 	return sum
 }
 
-func fibB(a0, a1, max int) []int {
-	fibs := []int{0} // 初項の0はインデックスをずらすためのダミー
-	if a0 > max {
-		return fibs
+func fibB(max uint) []uint {
+	if max < 1 {
+		return []uint{0}
 	}
-	fibs = append(fibs, a0)
-
-	if a1 > max {
-		return fibs
+	if max < 2 {
+		return []uint{0, 1}
 	}
-	fibs = append(fibs, a1)
 
-	n := a1
-	f := a0 + a1
+	fibs := []uint{0, 1, 2} // 初項の0はインデックスをずらすためのダミー
+
+	a := uint(2)
+	f := uint(3)
 	for f <= max {
 		fibs = append(fibs, f)
-		n, f = f, f+n
+		a, f = f, f+a
 	}
 
 	return fibs
 }
 
 // フィボナッチ数列を生成しながら足す
-func p002C(max int) int {
+func p002C(max uint) uint {
 	if max < 2 {
 		return 0
 	}
 
-	sum := 0
-	for a, f := 1, 2; f <= max; a, f = f, a+f {
+	sum := uint(0)
+	for a, f := uint(1), uint(2); f <= max; a, f = f, a+f {
 		if f%2 == 0 {
 			sum += f
 		}
@@ -105,16 +103,12 @@ func p002C(max int) int {
 
 // フィボナッチ数列ジェネレータ
 type fibonacciGenerator struct {
-	a1 int
-	a2 int
-	ch chan int
+	ch chan uint
 }
 
-func newFibonacciGenerator(a1, a2 int) *fibonacciGenerator {
+func newFibonacciGenerator() *fibonacciGenerator {
 	gen := fibonacciGenerator{
-		a1: a1,
-		a2: a2,
-		ch: make(chan int),
+		ch: make(chan uint),
 	}
 
 	go gen.start()
@@ -123,23 +117,26 @@ func newFibonacciGenerator(a1, a2 int) *fibonacciGenerator {
 }
 
 func (g *fibonacciGenerator) start() {
-	g.ch <- g.a1
-	g.ch <- g.a2
+	g.ch <- 0
+	g.ch <- 1
 
-	for fib1, fib2 := g.a1, g.a2; ; fib1, fib2 = fib2, fib1+fib2 {
+	for fib1, fib2 := uint(0), uint(1); ; fib1, fib2 = fib2, fib1+fib2 {
 		g.ch <- fib1 + fib2
 	}
 }
 
-func (g *fibonacciGenerator) Next() int {
+func (g *fibonacciGenerator) Next() uint {
 	return <-g.ch
 }
 
 // フィボナッチ数列ジェネレータを使って足していく
-func p002D(max int) int {
-	gen := newFibonacciGenerator(1, 2)
+func p002D(max uint) uint {
+	gen := newFibonacciGenerator()
+	// 今回は初項が1、第2項は2なので、先頭から2つ落とす
+	gen.Next()
+	gen.Next()
 
-	sum := 0
+	sum := uint(0)
 	for f := gen.Next(); f <= max; f = gen.Next() {
 		if f%2 == 0 {
 			sum += f
