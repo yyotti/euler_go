@@ -5,14 +5,14 @@ import (
 )
 
 // PrimeGenerator : 無限素数ジェネレータ
-// http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借
-type PrimeGenerator struct {
-	ch chan uint
+type PrimeGenerator interface {
+	start()
+	Next() uint
 }
 
 // NewPrimeGenerator : PrimeGeneratorコンストラクタ
-func NewPrimeGenerator() *PrimeGenerator {
-	gen := PrimeGenerator{
+func NewPrimeGenerator() PrimeGenerator {
+	gen := primeGeneratorA{
 		ch: make(chan uint),
 	}
 
@@ -21,7 +21,12 @@ func NewPrimeGenerator() *PrimeGenerator {
 	return &gen
 }
 
-func (g *PrimeGenerator) start() {
+// http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借
+type primeGeneratorA struct {
+	ch chan uint
+}
+
+func (g *primeGeneratorA) start() {
 	// Key   元の素数の奇数倍
 	// Value 元の素数の2倍
 	multiples := map[uint]uint{}
@@ -56,7 +61,7 @@ func (g *PrimeGenerator) start() {
 }
 
 // Next : 次の素数を取得する
-func (g *PrimeGenerator) Next() uint {
+func (g *primeGeneratorA) Next() uint {
 	return <-g.ch
 }
 

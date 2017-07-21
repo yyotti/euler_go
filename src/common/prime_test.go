@@ -10,13 +10,18 @@ func TestNewPrimeGenerator(t *testing.T) {
 	if actual == nil {
 		t.Errorf("Fibonacci generator is nil")
 	}
-	if actual.ch == nil {
-		t.Errorf("ch is nil")
+	switch actual.(type) {
+	case *primeGeneratorA:
+		if actual.(*primeGeneratorA).ch == nil {
+			t.Errorf("ch is nil")
+		}
+	default:
+		t.Errorf("Not a `primeGeneratorA` instance")
 	}
 }
 
-func TestPrimeGenerator_start(t *testing.T) {
-	gen := &PrimeGenerator{ch: make(chan uint)}
+func TestPrimeGeneratorA_start(t *testing.T) {
+	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
 	for _, expected := range []uint{2, 3, 5, 7} {
 		actual := <-gen.ch
@@ -27,8 +32,8 @@ func TestPrimeGenerator_start(t *testing.T) {
 	}
 }
 
-func TestPrimeGenerator_Next(t *testing.T) {
-	gen := &PrimeGenerator{ch: make(chan uint)}
+func TestPrimeGeneratorA_Next(t *testing.T) {
+	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
 	for _, expected := range []uint{2, 3, 5, 7} {
 		actual := gen.Next()
@@ -39,8 +44,8 @@ func TestPrimeGenerator_Next(t *testing.T) {
 	}
 }
 
-func BenchmarkPrimeGenerator(b *testing.B) {
-	gen := &PrimeGenerator{ch: make(chan uint)}
+func BenchmarkPrimeGeneratorA(b *testing.B) {
+	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
