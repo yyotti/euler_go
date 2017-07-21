@@ -138,6 +138,8 @@ func TestPrimeFactors(t *testing.T) {
 }
 
 func BenchmarkPrimeFactors(b *testing.B) {
+	// キャッシュをリセット
+	newPrimeGeneratorB()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		PrimeFactors(3628800) // 1 x 2 x ... x 10

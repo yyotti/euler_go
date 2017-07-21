@@ -1,7 +1,6 @@
 package common
 
 import (
-	"math"
 	"sync"
 )
 
@@ -66,13 +65,9 @@ func (g *primeGeneratorA) Next() uint {
 // PrimeFactors : 素因数分解
 func PrimeFactors(n uint) map[uint]uint {
 	pCounts := map[uint]uint{}
-	if n < 2 {
-		return pCounts
-	}
-
 	gen := NewPrimeGenerator()
 	k := n
-	for i := gen.Next(); float64(i) <= math.Sqrt(float64(n)); i = gen.Next() {
+	for i := gen.Next(); i*i <= n; i = gen.Next() {
 		for k%i == 0 {
 			cnt, ok := pCounts[i]
 			if ok {
@@ -85,7 +80,7 @@ func PrimeFactors(n uint) map[uint]uint {
 		}
 	}
 
-	if k != 1 {
+	if k > 1 {
 		pCounts[k] = 1
 	}
 
