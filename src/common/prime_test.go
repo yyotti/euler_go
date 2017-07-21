@@ -2,6 +2,7 @@ package common
 
 import (
 	"reflect"
+	"sync"
 	"testing"
 )
 
@@ -11,12 +12,12 @@ func TestNewPrimeGenerator(t *testing.T) {
 		t.Errorf("Fibonacci generator is nil")
 	}
 	switch actual.(type) {
-	case *primeGeneratorA:
-		if actual.(*primeGeneratorA).ch == nil {
-			t.Errorf("ch is nil")
+	case *primeGeneratorB:
+		if actual.(*primeGeneratorB).idx != 0 {
+			t.Errorf("Expected 0 but got %d", actual.(*primeGeneratorB).idx)
 		}
 	default:
-		t.Errorf("Not a `primeGeneratorA` instance")
+		t.Errorf("Not a `primeGeneratorB` instance")
 	}
 }
 
@@ -32,6 +33,28 @@ func TestPrimeGeneratorA_start(t *testing.T) {
 	}
 }
 
+func newPrimeGeneratorB() *primeGeneratorB {
+	gen := &primeGeneratorB{}
+	gen.start()
+
+	// キャッシュをクリアする
+	primes = make([]uint, 0, 1000)
+	primes = append(primes, 2, 3)
+	primeMax = 3
+
+	mutex = &sync.Mutex{}
+
+	return gen
+}
+
+func TestPrimeGeneratorB_start(t *testing.T) {
+	gen := newPrimeGeneratorB()
+
+	if gen.idx != 0 {
+		t.Errorf("Expected %d but got %d", 0, gen.idx)
+	}
+}
+
 func TestPrimeGeneratorA_Next(t *testing.T) {
 	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
@@ -44,9 +67,44 @@ func TestPrimeGeneratorA_Next(t *testing.T) {
 	}
 }
 
+func TestPrimeGeneratorB_Next(t *testing.T) {
+	gen := newPrimeGeneratorB()
+	for _, expected := range []uint{2, 3, 5, 7} {
+		actual := gen.Next()
+		if actual != expected {
+			t.Errorf("Expected %d but got %d", expected, actual)
+			break
+		}
+	}
+}
+
 func BenchmarkPrimeGeneratorA(b *testing.B) {
 	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		gen.Next()
+	}
+}
+
+func BenchmarkPrimeGeneratorB(b *testing.B) {
+	gen := newPrimeGeneratorB()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		gen.Next()
+	}
+}
+
+func BenchmarkPrimeGeneratorB_cached(b *testing.B) {
+	// 10000未満の素数をあらかじめキャッシュしておく
+	b.N = 10000
+	genPre := newPrimeGeneratorB()
+	for i := 0; i < b.N; i++ {
+		genPre.Next()
+	}
+
+	gen := &primeGeneratorB{}
+	gen.start()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		gen.Next()
@@ -76,5 +134,12 @@ func TestPrimeFactors(t *testing.T) {
 		if !reflect.DeepEqual(actual, tt.expected) {
 			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
 		}
+	}
+}
+
+func BenchmarkPrimeFactors(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		PrimeFactors(3628800) // 1 x 2 x ... x 10
 	}
 }

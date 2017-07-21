@@ -2,6 +2,7 @@ package common
 
 import (
 	"math"
+	"sync"
 )
 
 // PrimeGenerator : 無限素数ジェネレータ
@@ -12,11 +13,8 @@ type PrimeGenerator interface {
 
 // NewPrimeGenerator : PrimeGeneratorコンストラクタ
 func NewPrimeGenerator() PrimeGenerator {
-	gen := primeGeneratorA{
-		ch: make(chan uint),
-	}
-
-	go gen.start()
+	gen := primeGeneratorB{}
+	gen.start()
 
 	return &gen
 }
@@ -92,4 +90,58 @@ func PrimeFactors(n uint) map[uint]uint {
 	}
 
 	return pCounts
+}
+
+var primes []uint
+var primeMax uint
+var mutex *sync.Mutex
+
+func init() {
+	primes = make([]uint, 0, 1000)
+	primes = append(primes, 2, 3)
+	primeMax = 3
+
+	mutex = &sync.Mutex{}
+}
+
+// キャッシュを使う実装
+type primeGeneratorB struct {
+	idx int
+}
+
+func (g *primeGeneratorB) start() {
+	g.idx = 0
+}
+
+// Next : 次の素数を取得する
+func (g *primeGeneratorB) Next() uint {
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	var p uint
+	if g.idx < len(primes) {
+		p = primes[g.idx]
+	} else {
+		i := primeMax + 2
+		for ; ; i += 2 {
+			isPrime := true
+			for _, p := range primes {
+				if p*p > i {
+					break
+				}
+				if i%p == 0 {
+					isPrime = false
+					break
+				}
+			}
+			if isPrime {
+				primes = append(primes, i)
+				primeMax = i
+				break
+			}
+		}
+		p = i
+	}
+	g.idx++
+	return p
 }
