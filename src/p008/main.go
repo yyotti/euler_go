@@ -1,8 +1,12 @@
 package main
 
-import "fmt"
-import "strings"
-import "sync"
+import (
+	"fmt"
+	"strings"
+	"sync"
+
+	"github.com/yyotti/euler_go/src/common"
+)
 
 // The four adjacent digits in the 1000-digit number that have the greatest
 // product are 9 x 9 x 8 x 9 = 5832.
@@ -61,23 +65,6 @@ func main() {
 	fmt.Printf("P008D: %d\n", p008D(count))
 }
 
-func splitNums(s string) ([]uint, error) {
-	if len(s) == 0 {
-		return []uint{}, nil
-	}
-
-	nums := make([]uint, len(s))
-	for i, c := range s {
-		if c < '0' || c > '9' {
-			return nil, fmt.Errorf("Not number: %c", c)
-		}
-
-		nums[i] = uint(c - '0')
-	}
-
-	return nums, nil
-}
-
 func product(nums []uint) uint {
 	if len(nums) == 0 {
 		return 0
@@ -98,7 +85,7 @@ func p008A(cnt uint) uint {
 
 	max := uint(0)
 	for i := 0; i <= len(num)-int(cnt); i++ {
-		nums, err := splitNums(num[i : i+int(cnt)])
+		nums, err := common.SplitNums(num[i : i+int(cnt)])
 		if err != nil {
 			panic(err)
 		}
@@ -128,7 +115,7 @@ func p008B(cnt uint) uint {
 		}
 
 		for i := 0; i <= len(part)-int(cnt); i++ {
-			nums, err := splitNums(part[i : i+int(cnt)])
+			nums, err := common.SplitNums(part[i : i+int(cnt)])
 			if err != nil {
 				panic(err)
 			}
@@ -163,7 +150,7 @@ func p008C(cnt uint) uint {
 			go func(i int) {
 				defer w.Done()
 
-				nums, err := splitNums(num[i : i+int(cnt)])
+				nums, err := common.SplitNums(num[i : i+int(cnt)])
 				if err != nil {
 					panic(err)
 				}
@@ -221,7 +208,7 @@ func p008D(cnt uint) uint {
 					go func(i int) {
 						defer wg.Done()
 
-						nums, err := splitNums(part[i : i+int(cnt)])
+						nums, err := common.SplitNums(part[i : i+int(cnt)])
 						if err != nil {
 							panic(err)
 						}

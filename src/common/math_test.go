@@ -1,6 +1,8 @@
 package common
 
-import "testing"
+import (
+	"testing"
+)
 
 var gcdTests = []struct {
 	input    []int
