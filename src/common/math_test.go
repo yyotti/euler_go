@@ -222,3 +222,53 @@ func BenchmarkCombinationD(b *testing.B) {
 		CombinationD(20, 10)
 	}
 }
+
+var addTests = []struct {
+	inA      string
+	inB      string
+	expected string
+}{
+	{inA: "0", inB: "0", expected: "0"},
+	{inA: "1", inB: "0", expected: "1"},
+	{inA: "0", inB: "2", expected: "2"},
+	{inA: "1", inB: "2", expected: "3"},
+	{inA: "10", inB: "1", expected: "11"},
+	{inA: "2", inB: "20", expected: "22"},
+	{inA: "12", inB: "23", expected: "35"},
+	{inA: "1234", inB: "5678", expected: "6912"},
+	{inA: "2", inB: "4998", expected: "5000"},
+	{inA: "99", inB: "9", expected: "108"},
+}
+
+func TestAdd(t *testing.T) {
+	for _, tt := range addTests {
+		actual := Add(tt.inA, tt.inB)
+		if actual != tt.expected {
+			t.Errorf("%s+%s: Expected %s but got %s", tt.inA, tt.inB, tt.expected, actual)
+		}
+	}
+}
+
+var mulTests = []struct {
+	inA      string
+	inB      string
+	expected string
+}{
+	{inA: "0", inB: "0", expected: "0"},
+	{inA: "1", inB: "0", expected: "0"},
+	{inA: "0", inB: "2", expected: "0"},
+	{inA: "1", inB: "2", expected: "2"},
+	{inA: "10", inB: "1", expected: "10"},
+	{inA: "2", inB: "20", expected: "40"},
+	{inA: "12", inB: "23", expected: "276"},
+	{inA: "1", inB: "200", expected: "200"},
+}
+
+func TestMul(t *testing.T) {
+	for _, tt := range mulTests {
+		actual := Mul(tt.inA, tt.inB)
+		if actual != tt.expected {
+			t.Errorf("%s+%s: Expected %s but got %s", tt.inA, tt.inB, tt.expected, actual)
+		}
+	}
+}

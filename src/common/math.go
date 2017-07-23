@@ -154,3 +154,100 @@ func CombinationD(n, r uint) uint64 {
 
 	return combi
 }
+
+// Add : 数字を表す文字列同士の和をとる
+func Add(a, b string) string {
+	ns1, err := SplitNums(a)
+	if err != nil {
+		panic(err)
+	}
+	ns2, err := SplitNums(b)
+	if err != nil {
+		panic(err)
+	}
+
+	l := len(ns1)
+	if l < len(ns2) {
+		l = len(ns2)
+	}
+
+	if len(ns1) < l {
+		ns1 = append(make([]uint, l-len(ns1), l), ns1...)
+	}
+
+	if len(ns2) < l {
+		ns2 = append(make([]uint, l-len(ns2), l), ns2...)
+	}
+
+	// 下の桁から和をとっていき、逆順に詰める
+	digits := make([]uint, 0, l)
+	c := uint(0) // 繰り上がり
+	for i := l - 1; i >= 0; i-- {
+		d := c
+		d += ns1[i]
+		d += ns2[i]
+		d, c = d%10, d/10
+		digits = append(digits, d)
+	}
+	if c > 0 {
+		digits = append(digits, c)
+	}
+
+	// 結果を逆順にして文字列にする
+	str := make([]byte, len(digits))
+	for i, d := range digits {
+		str[len(digits)-1-i] = '0' + byte(d)
+	}
+
+	return string(str)
+}
+
+// Mul : 数字を表す文字列同士の積をとる
+func Mul(a, b string) string {
+	ns1, err := SplitNums(a)
+	if err != nil {
+		panic(err)
+	}
+	ns2, err := SplitNums(b)
+	if err != nil {
+		panic(err)
+	}
+
+	// 桁数が小さい方を「掛ける数」にする
+	if len(ns1) < len(ns2) {
+		ns1, ns2 = ns2, ns1
+	}
+
+	// 下の桁から筆算をしていってそれぞれを文字列で加算する
+	mul := "0"
+	for i := len(ns2) - 1; i >= 0; i-- {
+		d := ns2[i]
+		if d == 0 {
+			// 0をかけるなら何もしない
+			ns1 = append(ns1, 0)
+			continue
+		}
+		c := uint(0)
+		digits := make([]uint, 0, len(ns1))
+		for j := len(ns1) - 1; j >= 0; j-- {
+			m := d*ns1[j] + c
+			m, c = m%10, m/10
+			digits = append(digits, m)
+		}
+		if c > 0 {
+			digits = append(digits, c)
+		}
+
+		// 結果を逆順にして文字列にする
+		str := make([]byte, len(digits))
+		for i, d := range digits {
+			str[len(digits)-1-i] = '0' + byte(d)
+		}
+
+		// 加算
+		mul = Add(mul, string(str))
+		ns1 = append(ns1, 0)
+	}
+
+	return mul
+}
