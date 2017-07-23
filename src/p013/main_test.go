@@ -55,6 +55,15 @@ func TestP013B(t *testing.T) {
 	}
 }
 
+func TestP013C(t *testing.T) {
+	for i, tt := range p013Tests {
+		actual := p013C(tt.input)
+		if actual != tt.expected {
+			t.Errorf("TEST %d: Expected %s but got %s", i, tt.expected, actual)
+		}
+	}
+}
+
 var p013Bench = []string{
 	"37107287533902102798797998220837590246510135740250",
 	"46376937677490009712648124896970078050417018260538",
@@ -100,10 +109,17 @@ func BenchmarkP013B(b *testing.B) {
 	}
 }
 
+func BenchmarkP013C(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		p013C(p013Bench)
+	}
+}
+
 func ExampleP013() {
 	main()
 
 	// Output:
 	// P013A: 5537376230390876637302048746832985971773659831892672
 	// P013B: 5537376230390876637302048746832985971773659831892672
+	// P013C: 5537376230390876637302048746832985971773659831892672
 }

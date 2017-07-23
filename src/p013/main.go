@@ -216,6 +216,7 @@ var numbers = []string{
 func main() {
 	fmt.Printf("P013A: %s\n", p013A(numbers))
 	fmt.Printf("P013B: %s\n", p013B(numbers))
+	fmt.Printf("P013C: %s\n", p013C(numbers))
 }
 
 // ライブラリ使って普通にやる
@@ -233,7 +234,7 @@ func p013A(nums []string) string {
 	return sum.Text(10)
 }
 
-// ライブラリを使わずにやる
+// ライブラリを使わずにやる(1)
 //
 // intの最大値を超えているので、1桁ずつ和と繰り上げを出してやっていくしかない
 func p013B(nums []string) string {
@@ -281,4 +282,15 @@ func p013B(nums []string) string {
 	}
 
 	return string(str)
+}
+
+// ライブラリを使わずにやる(2)
+//
+// さすがにライブラリの方が速い
+func p013C(nums []string) string {
+	sum := "0"
+	for _, n := range nums {
+		sum = common.Add(sum, n)
+	}
+	return sum
 }
