@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/big"
+	"strconv"
 
 	"github.com/yyotti/euler_go/src/common"
 )
@@ -213,14 +214,16 @@ var numbers = []string{
 	"53503534226472524250874054075591789781264330331690",
 }
 
+const cnt = 10
+
 func main() {
-	fmt.Printf("P013A: %s\n", p013A(numbers))
-	fmt.Printf("P013B: %s\n", p013B(numbers))
-	fmt.Printf("P013C: %s\n", p013C(numbers))
+	fmt.Printf("P013A: %d\n", p013A(numbers, 10))
+	fmt.Printf("P013B: %d\n", p013B(numbers, 10))
+	fmt.Printf("P013C: %d\n", p013C(numbers, 10))
 }
 
 // ライブラリ使って普通にやる
-func p013A(nums []string) string {
+func p013A(nums []string, cnt uint) uint64 {
 	bigInt := &big.Int{}
 
 	sum := big.NewInt(0)
@@ -231,15 +234,16 @@ func p013A(nums []string) string {
 		sum = bigInt.Add(sum, n)
 	}
 
-	return sum.Text(10)
+	i, _ := strconv.Atoi(sum.Text(10)[:cnt])
+	return uint64(i)
 }
 
 // ライブラリを使わずにやる(1)
 //
 // intの最大値を超えているので、1桁ずつ和と繰り上げを出してやっていくしかない
-func p013B(nums []string) string {
+func p013B(nums []string, cnt uint) uint64 {
 	if len(nums) == 0 {
-		return "0"
+		return 0
 	}
 
 	ns := make([][]uint, len(nums))
@@ -275,22 +279,24 @@ func p013B(nums []string) string {
 		c /= 10
 	}
 
-	// 結果を逆順にしながら文字列にする
-	str := make([]byte, len(digits))
-	for i, d := range digits {
-		str[len(digits)-i-1] = '0' + byte(d)
+	// 結果を逆順にしながら指定桁数をとる
+	sum := uint64(0)
+	for i := len(digits) - 1; len(digits)-1-i < int(cnt); i-- {
+		sum = sum*10 + uint64(digits[i])
 	}
 
-	return string(str)
+	return sum
 }
 
 // ライブラリを使わずにやる(2)
 //
 // さすがにライブラリの方が速い
-func p013C(nums []string) string {
+func p013C(nums []string, cnt uint) uint64 {
 	sum := "0"
 	for _, n := range nums {
 		sum = common.Add(sum, n)
 	}
-	return sum
+
+	i, _ := strconv.Atoi(sum[:cnt])
+	return uint64(i)
 }

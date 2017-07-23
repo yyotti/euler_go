@@ -3,63 +3,68 @@ package main
 import "testing"
 
 var p013Tests = []struct {
-	input    []string
-	expected string
+	inNums   []string
+	inCnt    uint
+	expected uint64
 }{
 	// TEST0 {{{
 	{
-		input:    []string{},
-		expected: "0",
+		inNums:   []string{},
+		inCnt:    1,
+		expected: 0,
 	},
 	// }}}
 	// TEST1 {{{
 	{
-		input: []string{
+		inNums: []string{
 			"3",
 		},
-		expected: "3",
+		inCnt:    1,
+		expected: 3,
 	},
 	// }}}
 	// TEST2 {{{
 	{
-		input:    []string{"5", "6"},
-		expected: "11",
+		inNums:   []string{"5", "6"},
+		inCnt:    2,
+		expected: 11,
 	},
 	// }}}
 	// TEST3 {{{
 	{
-		input: []string{
+		inNums: []string{
 			"37107287533902102798797998220837590246510135740250",
 			"46376937677490009712648124896970078050417018260538",
 		},
-		expected: "83484225211392112511446123117807668296927154000788",
+		inCnt:    10,
+		expected: 8348422521,
 	},
 	// }}}
 }
 
 func TestP013A(t *testing.T) {
 	for i, tt := range p013Tests {
-		actual := p013A(tt.input)
+		actual := p013A(tt.inNums, tt.inCnt)
 		if actual != tt.expected {
-			t.Errorf("TEST %d: Expected %s but got %s", i, tt.expected, actual)
+			t.Errorf("TEST %d: Expected %d but got %d", i, tt.expected, actual)
 		}
 	}
 }
 
 func TestP013B(t *testing.T) {
 	for i, tt := range p013Tests {
-		actual := p013B(tt.input)
+		actual := p013B(tt.inNums, tt.inCnt)
 		if actual != tt.expected {
-			t.Errorf("TEST %d: Expected %s but got %s", i, tt.expected, actual)
+			t.Errorf("TEST %d: Expected %d but got %d", i, tt.expected, actual)
 		}
 	}
 }
 
 func TestP013C(t *testing.T) {
 	for i, tt := range p013Tests {
-		actual := p013C(tt.input)
+		actual := p013C(tt.inNums, tt.inCnt)
 		if actual != tt.expected {
-			t.Errorf("TEST %d: Expected %s but got %s", i, tt.expected, actual)
+			t.Errorf("TEST %d: Expected %d but got %d", i, tt.expected, actual)
 		}
 	}
 }
@@ -99,19 +104,19 @@ var p013Bench = []string{
 
 func BenchmarkP013A(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		p013A(p013Bench)
+		p013A(p013Bench, 10)
 	}
 }
 
 func BenchmarkP013B(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		p013B(p013Bench)
+		p013B(p013Bench, 10)
 	}
 }
 
 func BenchmarkP013C(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		p013C(p013Bench)
+		p013C(p013Bench, 10)
 	}
 }
 
@@ -119,7 +124,7 @@ func ExampleP013() {
 	main()
 
 	// Output:
-	// P013A: 5537376230390876637302048746832985971773659831892672
-	// P013B: 5537376230390876637302048746832985971773659831892672
-	// P013C: 5537376230390876637302048746832985971773659831892672
+	// P013A: 5537376230
+	// P013B: 5537376230
+	// P013C: 5537376230
 }
