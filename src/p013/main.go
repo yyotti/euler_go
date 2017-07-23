@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/big"
 	"strconv"
 
@@ -220,6 +221,7 @@ func main() {
 	fmt.Printf("P013A: %d\n", p013A(numbers, 10))
 	fmt.Printf("P013B: %d\n", p013B(numbers, 10))
 	fmt.Printf("P013C: %d\n", p013C(numbers, 10))
+	fmt.Printf("P013D: %d\n", p013D(numbers, 10))
 }
 
 // ライブラリ使って普通にやる
@@ -246,17 +248,29 @@ func p013B(nums []string, cnt uint) uint64 {
 		return 0
 	}
 
-	ns := make([][]uint, len(nums))
+	// 与えられた数字の桁数の最大値
 	maxCnt := 0
+	for _, s := range nums {
+		if maxCnt < len(s) {
+			maxCnt = len(s)
+		}
+	}
+
+	ns := make([][]uint, len(nums))
 	for i, s := range nums {
 		ds, err := common.SplitNums(s)
 		if err != nil {
 			panic(err)
 		}
-
-		ns[i] = ds
-		if maxCnt < len(ds) {
-			maxCnt = len(ds)
+		if len(ds) < maxCnt {
+			ds2 := make([]uint, 0, maxCnt)
+			for j := 0; j < maxCnt-len(ds); j++ {
+				ds2 = append(ds2, 0)
+			}
+			ds2 = append(ds2, ds...)
+			ns[i] = ds2
+		} else {
+			ns[i] = ds
 		}
 	}
 
@@ -299,4 +313,97 @@ func p013C(nums []string, cnt uint) uint64 {
 
 	i, _ := strconv.Atoi(sum[:cnt])
 	return uint64(i)
+}
+
+// ライブラリを使わずにやる(3)
+//
+// P013Bの改良。
+// まず先頭の10桁を切り出して数値化しておく。
+// 残った桁を、[32bit正数の最大桁数]桁ごとに切り出して計算し、繰り上がりを求め
+// つつ足していく。
+//
+// NOTE: 色々なパターンを考慮しすぎ&いい加減に作りすぎてカオス
+func p013D(nums []string, cnt uint) uint64 {
+	if len(nums) == 0 {
+		return 0
+	}
+
+	// 与えられた数字の桁数の最大値
+	maxCnt := 0
+	for _, s := range nums {
+		if maxCnt < len(s) {
+			maxCnt = len(s)
+		}
+	}
+
+	count := cnt
+	if uint(maxCnt) < count {
+		count = uint(maxCnt)
+	}
+
+	l32 := len(strconv.FormatUint(math.MaxUint32, 10))
+	ns := make([][]uint64, 0, len(nums))
+	lens := []int{}
+	for j, s := range nums {
+		str := make([]byte, 0, maxCnt)
+		for i := 0; i < maxCnt-len(s); i++ {
+			str = append(str, '0')
+		}
+		str = append(str, s...)
+		// まず先頭のcnt桁を切り出す
+		ms := []uint64{}
+		k, _ := strconv.ParseUint(string(str[0:count]), 10, 64)
+		ms = append(ms, k)
+		if j == 0 {
+			lens = append(lens, int(count))
+		}
+		// 残りを切り出す
+		if len(str) > int(count) {
+			str = str[count:]
+			for len(str) > 0 {
+				if len(str) > l32 {
+					k, _ := strconv.ParseUint(string(str[0:l32]), 10, 64)
+					ms = append(ms, k)
+					if j == 0 {
+						lens = append(lens, l32)
+					}
+					str = str[l32:]
+				} else {
+					k, _ := strconv.ParseUint(string(str), 10, 64)
+					ms = append(ms, k)
+					if j == 0 {
+						lens = append(lens, len(str))
+					}
+					str = []byte{}
+				}
+			}
+		}
+		ns = append(ns, ms)
+	}
+
+	// 下の桁から和をとっていく
+	c := uint64(0) // 繰り上がり
+	for i := len(lens) - 1; i >= 1; i-- {
+		d := c // 和
+		for _, ds := range ns {
+			d += ds[i]
+		}
+		div := uint64(1)
+		for j := 0; j < lens[i]; j++ {
+			div *= 10
+		}
+		d, c = d%div, d/div
+	}
+	sum := c
+	for _, ds := range ns {
+		sum += ds[0]
+	}
+
+	str := strconv.FormatUint(sum, 10)
+	if len(str) <= int(cnt) {
+		return sum
+	}
+
+	sum, _ = strconv.ParseUint(str[0:cnt], 10, 64)
+	return sum
 }

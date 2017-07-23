@@ -25,9 +25,9 @@ var p013Tests = []struct {
 	// }}}
 	// TEST2 {{{
 	{
-		inNums:   []string{"5", "6"},
+		inNums:   []string{"5", "16"},
 		inCnt:    2,
-		expected: 11,
+		expected: 21,
 	},
 	// }}}
 	// TEST3 {{{
@@ -63,6 +63,15 @@ func TestP013B(t *testing.T) {
 func TestP013C(t *testing.T) {
 	for i, tt := range p013Tests {
 		actual := p013C(tt.inNums, tt.inCnt)
+		if actual != tt.expected {
+			t.Errorf("TEST %d: Expected %d but got %d", i, tt.expected, actual)
+		}
+	}
+}
+
+func TestP013D(t *testing.T) {
+	for i, tt := range p013Tests {
+		actual := p013D(tt.inNums, tt.inCnt)
 		if actual != tt.expected {
 			t.Errorf("TEST %d: Expected %d but got %d", i, tt.expected, actual)
 		}
@@ -120,6 +129,12 @@ func BenchmarkP013C(b *testing.B) {
 	}
 }
 
+func BenchmarkP013D(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		p013D(p013Bench, 10)
+	}
+}
+
 func ExampleP013() {
 	main()
 
@@ -127,4 +142,5 @@ func ExampleP013() {
 	// P013A: 5537376230
 	// P013B: 5537376230
 	// P013C: 5537376230
+	// P013D: 5537376230
 }
