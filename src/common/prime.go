@@ -1,6 +1,7 @@
 package common
 
 import (
+	"math"
 	"sync"
 )
 
@@ -19,6 +20,7 @@ func NewPrimeGenerator() PrimeGenerator {
 }
 
 // http://qiita.com/cia_rana/items/2a878181da41033ec1d8 から拝借
+// NOTE: リークする可能性がある？
 type primeGeneratorA struct {
 	ch chan uint
 }
@@ -63,11 +65,11 @@ func (g *primeGeneratorA) Next() uint {
 }
 
 // PrimeFactors : 素因数分解
-func PrimeFactors(n uint) map[uint]uint {
-	pCounts := map[uint]uint{}
+func PrimeFactors(n int64) map[int64]int {
+	pCounts := map[int64]int{}
 	gen := NewPrimeGenerator()
 	k := n
-	for i := gen.Next(); i*i <= n; i = gen.Next() {
+	for i := int64(gen.Next()); i < math.MaxUint32 && i*i <= n; i = int64(gen.Next()) {
 		for k%i == 0 {
 			cnt, ok := pCounts[i]
 			if ok {

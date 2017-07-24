@@ -52,19 +52,19 @@ func TestInt_String(t *testing.T) {
 	for _, tt := range intStringTests {
 		actual := tt.input.String()
 		if actual != tt.expected {
-			t.Errorf("%d: Expected \"%s\" but got \"%s\"", uint(tt.input), tt.expected, actual)
+			t.Errorf("%d: Expected \"%s\" but got \"%s\"", int(tt.input), tt.expected, actual)
 		}
 	}
 }
 
 var p017Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 0},
-	{input: 1, expected: uint(len("one"))},
-	{input: 2, expected: uint(len("one") + len("two"))},
-	{input: 3, expected: uint(len("one") + len("two") + len("three"))},
+	{input: 1, expected: len("one")},
+	{input: 2, expected: len("one") + len("two")},
+	{input: 3, expected: len("one") + len("two") + len("three")},
 }
 
 func TestP017A(t *testing.T) {

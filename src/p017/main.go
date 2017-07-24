@@ -22,12 +22,12 @@ func main() {
 }
 
 // つまらんので1つだけ回答を出して終わる
-func p017A(max uint) uint {
-	sum := uint(0)
-	for i := uint(1); i <= max; i++ {
+func p017A(max int) int {
+	sum := 0
+	for i := 1; i <= max; i++ {
 		s := Int(i).String()
 		for _, t := range strings.Split(s, " ") {
-			sum += uint(len(t))
+			sum += len(t)
 		}
 	}
 
@@ -35,7 +35,7 @@ func p017A(max uint) uint {
 }
 
 // Int : 専用int
-type Int uint
+type Int int
 
 // 面倒なので上限1000。速度も無視。
 func (i Int) String() string {
@@ -43,7 +43,7 @@ func (i Int) String() string {
 		return "one thousand"
 	}
 
-	k := uint(i)
+	k := i
 	str := ""
 	if k >= 100 {
 		str += Int(k/100).String() + " hundred"

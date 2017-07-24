@@ -20,34 +20,34 @@ func main() {
 }
 
 // メモ化
-var primes = map[uint]struct{}{}
+var primes = map[int64]struct{}{}
 
-type uintp uint
+type intp int64
 
-func (n uintp) isPrime() bool {
+func (n intp) isPrime() bool {
 	if n < 2 {
 		return false
 	}
 
-	if _, ok := primes[uint(n)]; ok {
+	if _, ok := primes[int64(n)]; ok {
 		return true
 	}
 
-	for i := uintp(2); float64(i) <= math.Sqrt(float64(n)); i++ {
-		if n%i == 0 {
+	for i := int64(2); i < math.MaxInt32 && i*i <= int64(n); i++ {
+		if n%intp(i) == 0 {
 			return false
 		}
 	}
 
-	primes[uint(n)] = struct{}{}
+	primes[int64(n)] = struct{}{}
 	return true
 }
 
 // nを純粋に素因数分解して、素因数の最大値を得る
-func p003A(n uint) uint {
+func p003A(n int64) int64 {
 	pf := primeFactors(n)
 
-	max := uint(1)
+	max := int64(1)
 	for p := range pf {
 		if p > max {
 			max = p
@@ -57,22 +57,22 @@ func p003A(n uint) uint {
 	return max
 }
 
-func primeFactors(n uint) map[uint]uint {
-	pCounts := map[uint]uint{}
+func primeFactors(n int64) map[int64]int {
+	pCounts := map[int64]int{}
 	if n < 2 {
 		return pCounts
 	}
 
 	k := n
-	for i := uint(2); float64(i) <= math.Sqrt(float64(n)); i++ {
-		if !uintp(i).isPrime() {
+	for i := int64(2); i < math.MaxInt32 && i*i <= n; i++ {
+		if !intp(i).isPrime() {
 			continue
 		}
 
-		for k%i == 0 {
-			cnt, ok := pCounts[i]
+		for k%int64(i) == 0 {
+			cnt, ok := pCounts[int64(i)]
 			if ok {
-				pCounts[i] = cnt + 1
+				pCounts[int64(i)] = cnt + 1
 			} else {
 				pCounts[i] = 1
 			}
@@ -89,11 +89,11 @@ func primeFactors(n uint) map[uint]uint {
 }
 
 // p003Aの素因数分解を無限素数ジェネレータを使ってやる
-func p003B(n uint) uint {
+func p003B(n int64) int64 {
 	// 実装はp003Aと同じ
 	pf := common.PrimeFactors(n)
 
-	max := uint(1)
+	max := int64(1)
 	for p := range pf {
 		if p > max {
 			max = p
@@ -104,20 +104,20 @@ func p003B(n uint) uint {
 }
 
 // 素因数分解はせずに、nを割り切れる最大の素数を探す
-func p003C(n uint) uint {
+func p003C(n int64) int64 {
 	if n < 2 {
 		return 1
 	}
 
 	// とりあえず2で割れるだけ割る
-	k := uintp(n)
+	k := intp(n)
 	for ; k%2 == 0; k /= 2 {
 	}
 	if k == 1 {
 		return 2
 	}
 
-	i := uintp(3)
+	i := intp(3)
 	for ; float64(i) <= math.Sqrt(float64(k)); i += 2 {
 		if !i.isPrime() {
 			continue
@@ -128,22 +128,22 @@ func p003C(n uint) uint {
 	}
 
 	if k == 1 {
-		return uint(i)
+		return int64(i)
 	}
 
-	return uint(k)
+	return int64(k)
 }
 
 // p003Cのジェネレータ利用版
-func p003D(n uint) uint {
+func p003D(n int64) int64 {
 	if n < 2 {
 		return 1
 	}
 
 	gen := common.NewPrimeGenerator()
 	k := n
-	max := uint(0)
-	for p := gen.Next(); float64(p) <= math.Sqrt(float64(k)); p = gen.Next() {
+	max := int64(0)
+	for p := int64(gen.Next()); p*p <= k; p = int64(gen.Next()) {
 		for ; k%p == 0; k /= p {
 		}
 		max = p

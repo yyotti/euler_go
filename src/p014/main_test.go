@@ -6,8 +6,8 @@ import (
 )
 
 var collatzTests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 1, expected: 4},
 	{input: 2, expected: 1},
@@ -27,14 +27,14 @@ func TestCollatz(t *testing.T) {
 }
 
 var collatzChainTests = []struct {
-	input    uint
-	expected []uint
+	input    int
+	expected []int
 }{
-	{input: 0, expected: []uint{}},
-	{input: 1, expected: []uint{1}},
-	{input: 2, expected: []uint{2, 1}},
-	{input: 3, expected: []uint{3, 10, 5, 16, 8, 4, 2, 1}},
-	{input: 13, expected: []uint{13, 40, 20, 10, 5, 16, 8, 4, 2, 1}},
+	{input: 0, expected: []int{}},
+	{input: 1, expected: []int{1}},
+	{input: 2, expected: []int{2, 1}},
+	{input: 3, expected: []int{3, 10, 5, 16, 8, 4, 2, 1}},
+	{input: 13, expected: []int{13, 40, 20, 10, 5, 16, 8, 4, 2, 1}},
 }
 
 func TestCollatzChain(t *testing.T) {
@@ -53,8 +53,8 @@ func BenchmarkCollatzChain(b *testing.B) {
 }
 
 var collatzCntTests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 0},
 	{input: 1, expected: 1},
@@ -79,27 +79,27 @@ func BenchmarkCollatzCnt(b *testing.B) {
 }
 
 var collatzCntCachedTests = []struct {
-	inStart  uint
-	inCache  map[uint]uint
-	expected uint
+	inStart  int
+	inCache  map[int]int
+	expected int
 }{
-	{inStart: 0, inCache: map[uint]uint{}, expected: 0},
-	{inStart: 0, inCache: map[uint]uint{1: 1}, expected: 0},
-	{inStart: 0, inCache: map[uint]uint{0: 2}, expected: 0},
-	{inStart: 1, inCache: map[uint]uint{}, expected: 1},
-	{inStart: 1, inCache: map[uint]uint{0: 100}, expected: 1},
-	{inStart: 1, inCache: map[uint]uint{1: 0}, expected: 1},
-	{inStart: 2, inCache: map[uint]uint{}, expected: 2},
-	{inStart: 2, inCache: map[uint]uint{0: 100}, expected: 2},
-	{inStart: 2, inCache: map[uint]uint{1: 3}, expected: 2},
-	{inStart: 2, inCache: map[uint]uint{2: 4}, expected: 4},
-	{inStart: 3, inCache: map[uint]uint{}, expected: 8},
-	{inStart: 3, inCache: map[uint]uint{0: 100}, expected: 8},
-	{inStart: 3, inCache: map[uint]uint{1: 200}, expected: 8},
-	{inStart: 3, inCache: map[uint]uint{3: 200}, expected: 200},
-	{inStart: 3, inCache: map[uint]uint{5: 50}, expected: 52},
-	{inStart: 13, inCache: map[uint]uint{}, expected: 10},
-	{inStart: 13, inCache: map[uint]uint{16: 30}, expected: 35},
+	{inStart: 0, inCache: map[int]int{}, expected: 0},
+	{inStart: 0, inCache: map[int]int{1: 1}, expected: 0},
+	{inStart: 0, inCache: map[int]int{0: 2}, expected: 0},
+	{inStart: 1, inCache: map[int]int{}, expected: 1},
+	{inStart: 1, inCache: map[int]int{0: 100}, expected: 1},
+	{inStart: 1, inCache: map[int]int{1: 0}, expected: 1},
+	{inStart: 2, inCache: map[int]int{}, expected: 2},
+	{inStart: 2, inCache: map[int]int{0: 100}, expected: 2},
+	{inStart: 2, inCache: map[int]int{1: 3}, expected: 2},
+	{inStart: 2, inCache: map[int]int{2: 4}, expected: 4},
+	{inStart: 3, inCache: map[int]int{}, expected: 8},
+	{inStart: 3, inCache: map[int]int{0: 100}, expected: 8},
+	{inStart: 3, inCache: map[int]int{1: 200}, expected: 8},
+	{inStart: 3, inCache: map[int]int{3: 200}, expected: 200},
+	{inStart: 3, inCache: map[int]int{5: 50}, expected: 52},
+	{inStart: 13, inCache: map[int]int{}, expected: 10},
+	{inStart: 13, inCache: map[int]int{16: 30}, expected: 35},
 }
 
 func TestCollatzCntCached(t *testing.T) {
@@ -112,7 +112,7 @@ func TestCollatzCntCached(t *testing.T) {
 }
 
 func BenchmarkCollatzCntCached_Nocache(b *testing.B) {
-	cache := map[uint]uint{}
+	cache := map[int]int{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		collatzCntCached(100000, cache)
@@ -120,7 +120,7 @@ func BenchmarkCollatzCntCached_Nocache(b *testing.B) {
 }
 
 func BenchmarkCollatzCntCached_Cache(b *testing.B) {
-	cache := map[uint]uint{
+	cache := map[int]int{
 		1: 1, 2: 2, 4: 3, 8: 4, 16: 5,
 		5: 6, 10: 7, 3: 8, 20: 8,
 		32: 6, 64: 7, 21: 8, 128: 8,
@@ -132,9 +132,10 @@ func BenchmarkCollatzCntCached_Cache(b *testing.B) {
 }
 
 var p014Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
+	{input: -1, expected: 0},
 	{input: 0, expected: 0},
 	{input: 1, expected: 1},
 	{input: 2, expected: 2},

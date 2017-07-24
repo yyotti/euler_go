@@ -5,32 +5,36 @@ import (
 )
 
 type p001Input struct {
-	max uint
-	ds  []uint
+	max int
+	ds  []int
 }
 
 var p001Tests = []struct {
 	input    p001Input
-	expected uint
+	expected int
 }{
 	{
-		input:    p001Input{max: 10, ds: []uint{3, 5}},
+		input:    p001Input{max: -1, ds: []int{1, 2}},
+		expected: 0,
+	},
+	{
+		input:    p001Input{max: 10, ds: []int{3, 5}},
 		expected: 3 + 5 + 6 + 9, // 23
 	},
 	{
-		input:    p001Input{max: 20, ds: []uint{3, 5}},
+		input:    p001Input{max: 20, ds: []int{3, 5}},
 		expected: 3 + 5 + 6 + 9 + 10 + 12 + 15 + 18, // 78
 	},
 	{
-		input:    p001Input{max: 10, ds: []uint{2, 4}},
+		input:    p001Input{max: 10, ds: []int{2, 4}},
 		expected: 2 + 4 + 6 + 8, // 20
 	},
 	{
-		input:    p001Input{max: 20, ds: []uint{4, 2, 3}},
+		input:    p001Input{max: 20, ds: []int{4, 2, 3}},
 		expected: 2 + 3 + 4 + 6 + 8 + 9 + 10 + 12 + 14 + 15 + 16 + 18, // 117
 	},
 	{
-		input:    p001Input{max: 20, ds: []uint{4, 6, 9}},
+		input:    p001Input{max: 20, ds: []int{4, 6, 9}},
 		expected: 4 + 6 + 8 + 9 + 12 + 16 + 18, // 73
 	},
 }
@@ -65,14 +69,14 @@ func TestP001Z(t *testing.T) {
 func BenchmarkP001A(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p001A(10000, []uint{3, 5})
+		p001A(10000, []int{3, 5})
 	}
 }
 
 func BenchmarkP001B(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		p001B(10000, []uint{3, 5})
+		p001B(10000, []int{3, 5})
 	}
 }
 

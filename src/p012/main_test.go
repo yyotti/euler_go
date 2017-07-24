@@ -7,8 +7,8 @@ import (
 )
 
 var triangleTests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 0},
 	{input: 1, expected: 1},
@@ -28,15 +28,15 @@ func TestTriangle(t *testing.T) {
 }
 
 var divisorsTests = []struct {
-	input    uint
-	expected []uint
+	input    int
+	expected []int
 }{
-	{input: 0, expected: []uint{1}},
-	{input: 1, expected: []uint{1}},
-	{input: 2, expected: []uint{1, 2}},
-	{input: 3, expected: []uint{1, 3}},
-	{input: 4, expected: []uint{1, 2, 4}},
-	{input: 24, expected: []uint{1, 2, 3, 4, 6, 8, 12, 24}},
+	{input: 0, expected: []int{1}},
+	{input: 1, expected: []int{1}},
+	{input: 2, expected: []int{1, 2}},
+	{input: 3, expected: []int{1, 3}},
+	{input: 4, expected: []int{1, 2, 4}},
+	{input: 24, expected: []int{1, 2, 3, 4, 6, 8, 12, 24}},
 }
 
 func TestDivisors(t *testing.T) {
@@ -50,8 +50,8 @@ func TestDivisors(t *testing.T) {
 }
 
 var p012Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 1},
 	{input: 1, expected: 3},
@@ -78,9 +78,10 @@ func TestP012B(t *testing.T) {
 }
 
 var divisorsCntTests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
+	{input: -1, expected: 0},
 	{input: 0, expected: 1},
 	{input: 1, expected: 1},
 	{input: 2, expected: 2},

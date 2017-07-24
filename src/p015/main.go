@@ -28,14 +28,17 @@ func main() {
 
 // 全パターンを調べ上げる
 //
-// !!!遅すぎるので問題のサイズでの実行はしない!!!
-func p015A(x, y uint) uint64 {
+// NOTE: 遅すぎるので問題のサイズでの実行はしない
+func p015A(x, y int) int64 {
+	if x < 0 || y < 0 {
+		return 0
+	}
 	if x == 0 || y == 0 {
 		// 一直線しかない
 		return 1
 	}
 
-	total := uint64(0)
+	total := int64(0)
 
 	if x > 0 {
 		total += p015A(x-1, y)
@@ -56,21 +59,21 @@ func p015A(x, y uint) uint64 {
 // 問題になる。これは nCr で計算できる。
 //
 // CombinationBだと多少遅い
-func p015B(x, y uint) uint64 {
+func p015B(x, y int) int64 {
 	return common.CombinationB(x+y, x)
 }
 
 // 順列・組み合わせでやる(2)
 //
 // CombinationCだとさらに遅いが、ライブラリ不要
-// !!!遅すぎるので問題のサイズでの実行はしない!!!
-func p015C(x, y uint) uint64 {
+// NOTE: 遅すぎるので問題のサイズでの実行はしない
+func p015C(x, y int) int64 {
 	return common.CombinationC(x+y, x)
 }
 
 // 順列・組み合わせでやる(3)
 //
 // CombinationDを使用(最速)
-func p015D(x, y uint) uint64 {
+func p015D(x, y int) int64 {
 	return common.CombinationD(x+y, x)
 }

@@ -12,15 +12,15 @@ const max = 1000
 //
 // Find the sum of all the multiples of 3 or 5 below 1000.
 func main() {
-	fmt.Printf("P001A: %d\n", p001A(max, []uint{3, 5}))
-	fmt.Printf("P001B: %d\n", p001B(max, []uint{3, 5}))
+	fmt.Printf("P001A: %d\n", p001A(max, []int{3, 5}))
+	fmt.Printf("P001B: %d\n", p001B(max, []int{3, 5}))
 	fmt.Printf("P001Z: %d\n", p001Z(max))
 }
 
 // 素直にやる
-func p001A(max uint, ds []uint) uint {
-	sum := uint(0)
-	for i := uint(1); i < max; i++ {
+func p001A(max int, ds []int) int {
+	sum := 0
+	for i := 1; i < max; i++ {
 		for _, d := range ds {
 			if i%d == 0 {
 				sum += i
@@ -34,10 +34,10 @@ func p001A(max uint, ds []uint) uint {
 // nずつ増やして加算していく
 // dsの要素数が多い場合はこちらの方が高速だが、問題にあるように3と5だけでやる
 // ならAの方が速い
-func p001B(max uint, ds []uint) uint {
-	sum := uint(0)
+func p001B(max int, ds []int) int {
+	sum := 0
 	for i, n := range ds {
-		for j := uint(1); j*n < max; j++ {
+		for j := 1; j*n < max; j++ {
 			k := j * n
 			found := false
 			for _, n := range ds[i+1:] {
@@ -56,7 +56,7 @@ func p001B(max uint, ds []uint) uint {
 }
 
 // 問題のケースでしか使えない代わりに最高速。
-func p001Z(max uint) uint {
+func p001Z(max int) int {
 	n3 := (max - 1) / 3
 	n5 := (max - 1) / 5
 	n15 := (max - 1) / 15

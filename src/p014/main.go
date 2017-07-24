@@ -29,12 +29,12 @@ func main() {
 	fmt.Printf("P014C: %d\n", p014C(max))
 }
 
-func collatzChain(start uint) []uint {
+func collatzChain(start int) []int {
 	if start < 1 {
-		return []uint{}
+		return []int{}
 	}
 
-	chain := []uint{}
+	chain := []int{}
 	for n := start; n != 1; n = collatz(n) {
 		chain = append(chain, n)
 	}
@@ -43,7 +43,7 @@ func collatzChain(start uint) []uint {
 	return chain
 }
 
-func collatz(n uint) uint {
+func collatz(n int) int {
 	if n%2 == 0 {
 		return n / 2
 	}
@@ -51,10 +51,14 @@ func collatz(n uint) uint {
 }
 
 // 一番素直にやる
-func p014A(max uint) uint {
+func p014A(max int) int {
+	if max < 1 {
+		return 0
+	}
+
 	maxLen := 0
-	m := uint(0)
-	for i := uint(1); i <= max; i++ {
+	m := 0
+	for i := 1; i <= max; i++ {
 		chain := collatzChain(i)
 		if maxLen < len(chain) {
 			maxLen = len(chain)
@@ -65,12 +69,12 @@ func p014A(max uint) uint {
 	return m
 }
 
-func collatzCnt(start uint) uint {
+func collatzCnt(start int) int {
 	if start < 1 {
 		return 0
 	}
 
-	cnt := uint(1)
+	cnt := 1
 	for n := start; n != 1; n = collatz(n) {
 		cnt++
 	}
@@ -79,12 +83,12 @@ func collatzCnt(start uint) uint {
 }
 
 // キャッシュが十分に大きくないと遅いらしい
-func collatzCntCached(start uint, cache map[uint]uint) uint {
+func collatzCntCached(start int, cache map[int]int) int {
 	if start < 1 {
 		return 0
 	}
 
-	cnt := uint(1)
+	cnt := 1
 	for n := start; n != 1; n = collatz(n) {
 		if c, ok := cache[n]; ok {
 			cnt += c - 1
@@ -97,10 +101,14 @@ func collatzCntCached(start uint, cache map[uint]uint) uint {
 }
 
 // 数列を作る必要はないので、カウントだけする
-func p014B(max uint) uint {
-	maxCnt := uint(0)
-	m := uint(0)
-	for i := uint(1); i <= max; i++ {
+func p014B(max int) int {
+	if max < 1 {
+		return 0
+	}
+
+	maxCnt := 0
+	m := 0
+	for i := 1; i <= max; i++ {
 		cnt := collatzCnt(i)
 		if maxCnt < cnt {
 			maxCnt = cnt
@@ -117,9 +125,13 @@ func p014B(max uint) uint {
 //   L(2n) = L(n) + 1
 // であるため、L(n)より長くなる。これは全てのnについて言えるので、計算する範囲
 // は n >= N/2 に限定してよい。
-func p014C(max uint) uint {
-	maxCnt := uint(0)
-	m := uint(0)
+func p014C(max int) int {
+	if max < 1 {
+		return 0
+	}
+
+	maxCnt := 0
+	m := 0
 	for i := max / 2; i <= max; i++ {
 		cnt := collatzCnt(i)
 		if maxCnt < cnt {

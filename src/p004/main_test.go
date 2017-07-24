@@ -3,7 +3,7 @@ package main
 import "testing"
 
 var isParindromeTests = []struct {
-	input    uint
+	input    int
 	expected bool
 }{
 	{input: 0, expected: true},
@@ -46,8 +46,8 @@ func TestIsParindromeB(t *testing.T) {
 }
 
 var p004Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 0},
 	{input: 1, expected: 9},

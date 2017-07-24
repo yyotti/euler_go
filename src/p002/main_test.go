@@ -4,7 +4,7 @@ import "reflect"
 import "testing"
 
 var fibATests = []struct {
-	input    uint
+	input    int
 	expected uint
 }{
 	{input: 1, expected: 1},
@@ -29,8 +29,8 @@ func TestFibA(t *testing.T) {
 }
 
 var p002Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 1, expected: 0},
 	{input: 2, expected: 2},
@@ -56,19 +56,19 @@ func TestP002A(t *testing.T) {
 }
 
 var fibBTests = []struct {
-	input    uint
-	expected []uint
+	input    int
+	expected []int
 }{
-	{input: 1, expected: []uint{0, 1}},
-	{input: 2, expected: []uint{0, 1, 2}},
-	{input: 3, expected: []uint{0, 1, 2, 3}},
-	{input: 4, expected: []uint{0, 1, 2, 3}},
-	{input: 5, expected: []uint{0, 1, 2, 3, 5}},
-	{input: 6, expected: []uint{0, 1, 2, 3, 5}},
-	{input: 7, expected: []uint{0, 1, 2, 3, 5}},
-	{input: 8, expected: []uint{0, 1, 2, 3, 5, 8}},
-	{input: 9, expected: []uint{0, 1, 2, 3, 5, 8}},
-	{input: 10, expected: []uint{0, 1, 2, 3, 5, 8}},
+	{input: 1, expected: []int{0, 1}},
+	{input: 2, expected: []int{0, 1, 2}},
+	{input: 3, expected: []int{0, 1, 2, 3}},
+	{input: 4, expected: []int{0, 1, 2, 3}},
+	{input: 5, expected: []int{0, 1, 2, 3, 5}},
+	{input: 6, expected: []int{0, 1, 2, 3, 5}},
+	{input: 7, expected: []int{0, 1, 2, 3, 5}},
+	{input: 8, expected: []int{0, 1, 2, 3, 5, 8}},
+	{input: 9, expected: []int{0, 1, 2, 3, 5, 8}},
+	{input: 10, expected: []int{0, 1, 2, 3, 5, 8}},
 }
 
 func TestFibB(t *testing.T) {

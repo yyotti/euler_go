@@ -17,12 +17,12 @@ func main() {
 }
 
 // 普通にやったらどう考えてもオーバーフローするのでライブラリ使う
-func p016A(e uint) uint {
+func p016A(e int) int {
 	b := big.NewInt(2)
 	b.Exp(b, big.NewInt(int64(e)), nil)
 
 	ns, _ := common.SplitNums(b.Text(10))
-	sum := uint(0)
+	sum := 0
 	for _, d := range ns {
 		sum += d
 	}
@@ -31,13 +31,13 @@ func p016A(e uint) uint {
 }
 
 // ライブラリを使わずにやる(1)
-func p016B(e uint) uint {
+func p016B(e int) int {
 	mul := "1"
-	for i := uint(1); i <= e; i++ {
+	for i := 1; i <= e; i++ {
 		mul = common.Mul(mul, "2")
 	}
 
-	sum := uint(0)
+	sum := 0
 	ds, _ := common.SplitNums(mul)
 	for _, d := range ds {
 		sum += d
@@ -49,8 +49,8 @@ func p016B(e uint) uint {
 // ライブラリを使わずにやる(2)
 //
 // 文字列の掛け算を1より減らしてみる
-func p016C(e uint) uint {
-	ms := []uint{}
+func p016C(e int) int {
+	ms := []int{}
 	k := e
 	for {
 		i := uint(0)
@@ -59,8 +59,8 @@ func p016C(e uint) uint {
 		if i == 0 {
 			break
 		}
-		ms = append(ms, i)
-		k -= i
+		ms = append(ms, int(i))
+		k -= int(i)
 	}
 
 	ns := make([]string, 0, len(ms))
@@ -74,7 +74,7 @@ func p016C(e uint) uint {
 	}
 
 	ds, _ := common.SplitNums(mul)
-	sum := uint(0)
+	sum := 0
 	for _, d := range ds {
 		sum += d
 	}
@@ -82,7 +82,7 @@ func p016C(e uint) uint {
 	return sum
 }
 
-func pow2(e uint) string {
+func pow2(e int) string {
 	if e == 0 {
 		return "1"
 	}

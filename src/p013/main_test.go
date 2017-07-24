@@ -4,8 +4,8 @@ import "testing"
 
 var p013Tests = []struct {
 	inNums   []string
-	inCnt    uint
-	expected uint64
+	inCnt    int
+	expected int64
 }{
 	// TEST0 {{{
 	{
@@ -38,6 +38,26 @@ var p013Tests = []struct {
 		},
 		inCnt:    10,
 		expected: 8348422521,
+	},
+	// }}}
+	// TEST4 {{{
+	{
+		inNums: []string{
+			"37107287533902102798797998220837590246510135740250",
+			"46376937677490009712648124896970078050417018260538",
+		},
+		inCnt:    -1,
+		expected: 0,
+	},
+	// }}}
+	// TEST5 {{{
+	{
+		inNums: []string{
+			"37107287533902102798797998220837590246510135740250",
+			"46376937677490009712648124896970078050417018260538",
+		},
+		inCnt:    0,
+		expected: 0,
 	},
 	// }}}
 }

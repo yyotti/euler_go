@@ -3,9 +3,10 @@ package main
 import "testing"
 
 var p008Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int64
 }{
+	{input: -1, expected: 0},
 	{input: 0, expected: 0},
 	{input: 1, expected: 9},
 	{input: 4, expected: 5832},
@@ -48,13 +49,13 @@ func TestP008D(t *testing.T) {
 }
 
 var productTests = []struct {
-	input    []uint
-	expected uint
+	input    []int
+	expected int64
 }{
-	{input: []uint{}, expected: 0},
-	{input: []uint{2}, expected: 2},
-	{input: []uint{2, 3}, expected: 6},
-	{input: []uint{4, 0, 5}, expected: 0},
+	{input: []int{}, expected: 0},
+	{input: []int{2}, expected: 2},
+	{input: []int{2, 3}, expected: 6},
+	{input: []int{4, 0, 5}, expected: 0},
 }
 
 func TestProduct(t *testing.T) {

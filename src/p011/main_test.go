@@ -5,20 +5,20 @@ import (
 )
 
 var p011Tests = []struct {
-	inNums   [][]uint
+	inNums   [][]int
 	inCnt    int
-	expected uint
+	expected int
 }{
 	// TEST0 {{{
 	{
-		inNums:   [][]uint{},
+		inNums:   [][]int{},
 		inCnt:    0,
 		expected: 0,
 	},
 	// }}}
 	// TEST1 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{1},
 		},
 		inCnt:    2,
@@ -27,7 +27,7 @@ var p011Tests = []struct {
 	// }}}
 	// TEST2 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{2},
 		},
 		inCnt:    1,
@@ -36,7 +36,7 @@ var p011Tests = []struct {
 	// }}}
 	// TEST3 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{2, 3},
 			{2, 1},
 		},
@@ -46,7 +46,7 @@ var p011Tests = []struct {
 	// }}}
 	// TEST4 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{2, 3},
 			{2, 1},
 		},
@@ -56,7 +56,7 @@ var p011Tests = []struct {
 	// }}}
 	// TEST5 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{4, 3, 2},
 			{1, 3, 1},
 			{1, 2, 4},
@@ -67,13 +67,24 @@ var p011Tests = []struct {
 	// }}}
 	// TEST6 {{{
 	{
-		inNums: [][]uint{
+		inNums: [][]int{
 			{4, 3, 2},
 			{1, 2, 1},
 			{4, 3, 4},
 		},
 		inCnt:    3,
 		expected: 48,
+	},
+	// }}}
+	// TEST6 {{{
+	{
+		inNums: [][]int{
+			{4, 3, 2},
+			{1, 2, 1},
+			{4, 3, 4},
+		},
+		inCnt:    -1,
+		expected: 0,
 	},
 	// }}}
 }
@@ -97,7 +108,7 @@ func TestP011B(t *testing.T) {
 }
 
 func BenchmarkP011A(b *testing.B) {
-	nums := [][]uint{
+	nums := [][]int{
 		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75},
 		{49, 49, 99, 40, 17, 81, 18, 57, 60, 87},
 		{81, 49, 31, 73, 55, 79, 14, 29, 93, 71},
@@ -117,7 +128,7 @@ func BenchmarkP011A(b *testing.B) {
 }
 
 func BenchmarkP011B(b *testing.B) {
-	nums := [][]uint{
+	nums := [][]int{
 		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75},
 		{49, 49, 99, 40, 17, 81, 18, 57, 60, 87},
 		{81, 49, 31, 73, 55, 79, 14, 29, 93, 71},

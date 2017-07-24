@@ -3,7 +3,7 @@ package main
 import "testing"
 
 var pow2Tests = []struct {
-	input    uint
+	input    int
 	expected string
 }{
 	{input: 0, expected: "1"},
@@ -29,8 +29,8 @@ func TestPow2(t *testing.T) {
 }
 
 var p016Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 1},
 	{input: 1, expected: 2},

@@ -34,7 +34,7 @@ import "sync"
 // What is the greatest product of four adjacent numbers in the same direction
 // (up, down, left, right, or diagonally) in the 20x20 grid?
 
-var numbers = [][]uint{
+var numbers = [][]int{
 	{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8},
 	{49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 4, 56, 62, 0},
 	{81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30, 3, 49, 13, 36, 65},
@@ -65,17 +65,17 @@ func main() {
 }
 
 // 普通にやるしかない？
-func p011A(nums [][]uint, cnt int) uint {
+func p011A(nums [][]int, cnt int) int {
 	if cnt <= 0 || len(nums) < cnt || len(nums[0]) < cnt {
 		return 0
 	}
 
-	max := uint(0)
+	max := 0
 	for i := 0; i < len(nums); i++ {
 		for j := 0; j < len(nums); j++ {
 			// 横
 			if j <= len(nums)-cnt {
-				p := uint(1)
+				p := 1
 				for k := 0; k < cnt; k++ {
 					p *= nums[i][j+k]
 				}
@@ -85,7 +85,7 @@ func p011A(nums [][]uint, cnt int) uint {
 			}
 			// 縦
 			if i <= len(nums)-cnt {
-				p := uint(1)
+				p := 1
 				for k := 0; k < cnt; k++ {
 					p *= nums[i+k][j]
 				}
@@ -95,7 +95,7 @@ func p011A(nums [][]uint, cnt int) uint {
 			}
 			// 右下
 			if i <= len(nums)-cnt && j <= len(nums)-cnt {
-				p := uint(1)
+				p := 1
 				for k := 0; k < cnt; k++ {
 					p *= nums[i+k][j+k]
 				}
@@ -105,7 +105,7 @@ func p011A(nums [][]uint, cnt int) uint {
 			}
 			// 左下
 			if i <= len(nums)-cnt && j >= cnt-1 {
-				p := uint(1)
+				p := 1
 				for k := 0; k < cnt; k++ {
 					p *= nums[i+k][j-k]
 				}
@@ -120,27 +120,27 @@ func p011A(nums [][]uint, cnt int) uint {
 }
 
 // P011Aを非同期で
-func p011B(nums [][]uint, cnt int) uint {
+func p011B(nums [][]int, cnt int) int {
 	if cnt <= 0 || len(nums) < cnt || len(nums[0]) < cnt {
 		return 0
 	}
 
-	max := uint(0)
+	max := 0
 
-	ch := make(chan uint, len(nums)*len(nums))
+	ch := make(chan int, len(nums)*len(nums))
 	done := make(chan struct{})
 	defer close(done)
 
-	go func(ch chan<- uint) {
+	go func(ch chan<- int) {
 		w := &sync.WaitGroup{}
 		for i := 0; i < len(nums); i++ {
 			for j := 0; j < len(nums); j++ {
 				// 横
 				if j <= len(nums)-cnt {
 					w.Add(1)
-					go func(i, j int, ch chan<- uint) {
+					go func(i, j int, ch chan<- int) {
 						defer w.Done()
-						p := uint(1)
+						p := 1
 						for k := 0; k < cnt; k++ {
 							p *= nums[i][j+k]
 						}
@@ -150,9 +150,9 @@ func p011B(nums [][]uint, cnt int) uint {
 				// 縦
 				if i <= len(nums)-cnt {
 					w.Add(1)
-					go func(i, j int, ch chan<- uint) {
+					go func(i, j int, ch chan<- int) {
 						defer w.Done()
-						p := uint(1)
+						p := 1
 						for k := 0; k < cnt; k++ {
 							p *= nums[i+k][j]
 						}
@@ -162,9 +162,9 @@ func p011B(nums [][]uint, cnt int) uint {
 				// 右下
 				if i <= len(nums)-cnt && j <= len(nums)-cnt {
 					w.Add(1)
-					go func(i, j int, ch chan<- uint) {
+					go func(i, j int, ch chan<- int) {
 						defer w.Done()
-						p := uint(1)
+						p := 1
 						for k := 0; k < cnt; k++ {
 							p *= nums[i+k][j+k]
 						}
@@ -174,9 +174,9 @@ func p011B(nums [][]uint, cnt int) uint {
 				// 左下
 				if i <= len(nums)-cnt && j >= cnt-1 {
 					w.Add(1)
-					go func(i, j int, ch chan<- uint) {
+					go func(i, j int, ch chan<- int) {
 						defer w.Done()
-						p := uint(1)
+						p := 1
 						for k := 0; k < cnt; k++ {
 							p *= nums[i+k][j-k]
 						}
@@ -189,7 +189,7 @@ func p011B(nums [][]uint, cnt int) uint {
 		close(ch)
 	}(ch)
 
-	go func(ch <-chan uint, done chan<- struct{}) {
+	go func(ch <-chan int, done chan<- struct{}) {
 		for p := range ch {
 			if max < p {
 				max = p

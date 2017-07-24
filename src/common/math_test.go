@@ -30,13 +30,16 @@ func TestGcd(t *testing.T) {
 }
 
 var lcmTests = []struct {
-	input    []uint
-	expected uint
+	input    []int
+	expected int
 }{
-	{input: []uint{2, 1}, expected: 2},
-	{input: []uint{3, 2}, expected: 6},
-	{input: []uint{4, 2}, expected: 4},
-	{input: []uint{4, 6}, expected: 12},
+	{input: []int{2, 1}, expected: 2},
+	{input: []int{-2, 1}, expected: 2},
+	{input: []int{2, -1}, expected: 2},
+	{input: []int{-2, -1}, expected: 2},
+	{input: []int{3, 2}, expected: 6},
+	{input: []int{4, 2}, expected: 4},
+	{input: []int{4, 6}, expected: 12},
 }
 
 func TestLcm(t *testing.T) {
@@ -49,29 +52,33 @@ func TestLcm(t *testing.T) {
 }
 
 var permutationATests = []struct {
-	inN      uint
-	inR      uint
-	expected uint64
+	inN      int
+	inR      int
+	expected int64
 }{
+	{inN: -1, inR: -2, expected: 0},
+	{inN: -1, inR: -1, expected: 0},
+	{inN: 1, inR: -1, expected: 0},
+	{inN: -1, inR: 1, expected: 0},
 	{inN: 0, inR: 0, expected: 1},
 	{inN: 1, inR: 0, expected: 1},
 	{inN: 1, inR: 1, expected: 1},
-	{inN: 1, inR: 2, expected: 1},
+	{inN: 1, inR: 2, expected: 0},
 	{inN: 2, inR: 0, expected: 1},
 	{inN: 2, inR: 1, expected: 2},
 	{inN: 2, inR: 2, expected: 2},
-	{inN: 2, inR: 3, expected: 2},
+	{inN: 2, inR: 3, expected: 0},
 	{inN: 3, inR: 0, expected: 1},
 	{inN: 3, inR: 1, expected: 3},
 	{inN: 3, inR: 2, expected: 6},
 	{inN: 3, inR: 3, expected: 6},
-	{inN: 3, inR: 4, expected: 6},
+	{inN: 3, inR: 4, expected: 0},
 	{inN: 4, inR: 0, expected: 1},
 	{inN: 4, inR: 1, expected: 4},
 	{inN: 4, inR: 2, expected: 12},
 	{inN: 4, inR: 3, expected: 24},
 	{inN: 4, inR: 4, expected: 24},
-	{inN: 4, inR: 5, expected: 24},
+	{inN: 4, inR: 5, expected: 0},
 }
 
 func TestPermutationA(t *testing.T) {
@@ -84,29 +91,33 @@ func TestPermutationA(t *testing.T) {
 }
 
 var permutationBTests = []struct {
-	inN      uint
-	inR      uint
+	inN      int
+	inR      int
 	expected *big.Int
 }{
+	{inN: -1, inR: -2, expected: big.NewInt(0)},
+	{inN: -1, inR: -1, expected: big.NewInt(0)},
+	{inN: 1, inR: -1, expected: big.NewInt(0)},
+	{inN: -1, inR: 1, expected: big.NewInt(0)},
 	{inN: 0, inR: 0, expected: big.NewInt(1)},
 	{inN: 1, inR: 0, expected: big.NewInt(1)},
 	{inN: 1, inR: 1, expected: big.NewInt(1)},
-	{inN: 1, inR: 2, expected: big.NewInt(1)},
+	{inN: 1, inR: 2, expected: big.NewInt(0)},
 	{inN: 2, inR: 0, expected: big.NewInt(1)},
 	{inN: 2, inR: 1, expected: big.NewInt(2)},
 	{inN: 2, inR: 2, expected: big.NewInt(2)},
-	{inN: 2, inR: 3, expected: big.NewInt(2)},
+	{inN: 2, inR: 3, expected: big.NewInt(0)},
 	{inN: 3, inR: 0, expected: big.NewInt(1)},
 	{inN: 3, inR: 1, expected: big.NewInt(3)},
 	{inN: 3, inR: 2, expected: big.NewInt(6)},
 	{inN: 3, inR: 3, expected: big.NewInt(6)},
-	{inN: 3, inR: 4, expected: big.NewInt(6)},
+	{inN: 3, inR: 4, expected: big.NewInt(0)},
 	{inN: 4, inR: 0, expected: big.NewInt(1)},
 	{inN: 4, inR: 1, expected: big.NewInt(4)},
 	{inN: 4, inR: 2, expected: big.NewInt(12)},
 	{inN: 4, inR: 3, expected: big.NewInt(24)},
 	{inN: 4, inR: 4, expected: big.NewInt(24)},
-	{inN: 4, inR: 5, expected: big.NewInt(24)},
+	{inN: 4, inR: 5, expected: big.NewInt(0)},
 }
 
 func TestPermutationB(t *testing.T) {
@@ -131,10 +142,13 @@ func BenchmarkPermutationB(b *testing.B) {
 }
 
 var combinationTests = []struct {
-	inN      uint
-	inR      uint
-	expected uint64
+	inN      int
+	inR      int
+	expected int64
 }{
+	{inN: -1, inR: -1, expected: 0},
+	{inN: 1, inR: -1, expected: 0},
+	{inN: -1, inR: 1, expected: 0},
 	{inN: 0, inR: 0, expected: 1},
 	{inN: 1, inR: 0, expected: 1},
 	{inN: 1, inR: 1, expected: 1},

@@ -23,7 +23,7 @@ func main() {
 	printAnswer("P009B", p009B(total))
 }
 
-func printAnswer(name string, ans []uint) {
+func printAnswer(name string, ans []int) {
 	if len(ans) == 1 {
 		fmt.Printf("%s: %d\n", name, ans[0])
 	} else if len(ans) == 0 {
@@ -43,9 +43,13 @@ func printAnswer(name string, ans []uint) {
 // また、a = b = c の場合に 3a = N であるから、
 //   3a < N
 // でなければならない。
-func p009A(total uint) []uint {
-	ans := []uint{}
-	for a := uint(1); 3*a < total; a++ {
+func p009A(total int) []int {
+	if total < 0 {
+		return []int{}
+	}
+
+	ans := []int{}
+	for a := 1; 3*a < total; a++ {
 		for b := a + 1; 2*b < total-a; b++ {
 			c := total - a - b
 
@@ -65,7 +69,7 @@ func p009A(total uint) []uint {
 //   m - n は奇数
 // とする。
 //
-// このとき、自然数の組(a, b, c)が原子ピタゴラス数であるには
+// このとき、自然数の組(a, b, c)が原始ピタゴラス数であるには
 //   (a, b, c) = (m^2 - n^2, 2mn, m^2 + n^2)
 //               or
 //               (2mn, m^2 - n^2, m^2 + n^2)
@@ -79,15 +83,22 @@ func p009A(total uint) []uint {
 // であるから、
 //   m^2 < N/2
 // であればよい。
-func p009B(total uint) []uint {
-	ans := []uint{}
-	for m := uint(2); 2*m*m <= total; m++ {
-		n := uint(1)
+//
+// また、原始ピタゴラス数の最小の組は(3,4,5)なので、totalが12未満の場合は無視
+// してよい。
+func p009B(total int) []int {
+	if total < 12 {
+		return []int{}
+	}
+
+	ans := []int{}
+	for m := 2; 2*m*m <= total; m++ {
+		n := 1
 		if m%2 != 0 {
 			n = 2
 		}
 		for ; n < m; n += 2 {
-			if (m-n)%2 != 1 || common.Gcd(int(m), int(n)) != 1 {
+			if (m-n)%2 != 1 || common.Gcd(m, n) != 1 {
 				continue
 			}
 

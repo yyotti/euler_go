@@ -8,14 +8,14 @@ import (
 
 var splitNumsTests = []struct {
 	input    string
-	expected []uint
+	expected []int
 	err      error
 }{
 	// 正常
-	{input: "", expected: []uint{}},
-	{input: "1", expected: []uint{1}},
-	{input: "12", expected: []uint{1, 2}},
-	{input: "012", expected: []uint{0, 1, 2}},
+	{input: "", expected: []int{}},
+	{input: "1", expected: []int{1}},
+	{input: "12", expected: []int{1, 2}},
+	{input: "012", expected: []int{0, 1, 2}},
 
 	// 異常
 	{input: "a", err: errors.New("Not number: a")},

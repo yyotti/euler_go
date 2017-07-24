@@ -3,9 +3,10 @@ package main
 import "testing"
 
 var p007Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int64
 }{
+	{input: -1, expected: 0},
 	{input: 0, expected: 0},
 	{input: 1, expected: 2},
 	{input: 2, expected: 3},

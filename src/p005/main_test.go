@@ -3,8 +3,8 @@ package main
 import "testing"
 
 var p005Tests = []struct {
-	input    uint
-	expected uint
+	input    int
+	expected int
 }{
 	{input: 0, expected: 0},
 	{input: 1, expected: 1},

@@ -3,10 +3,13 @@ package main
 import "testing"
 
 var p015Tests = []struct {
-	inputX   uint
-	inputY   uint
-	expected uint64
+	inputX   int
+	inputY   int
+	expected int64
 }{
+	{inputX: -1, inputY: -1, expected: 0},
+	{inputX: 0, inputY: -1, expected: 0},
+	{inputX: -1, inputY: 0, expected: 0},
 	{inputX: 0, inputY: 0, expected: 1},
 	{inputX: 1, inputY: 0, expected: 1},
 	{inputX: 0, inputY: 1, expected: 1},

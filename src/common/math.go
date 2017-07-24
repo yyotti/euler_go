@@ -21,18 +21,22 @@ func Gcd(m, n int) int {
 }
 
 // Lcm : 最小公倍数
-func Lcm(m, n uint) uint {
-	return m * n / uint(Gcd(int(m), int(n)))
+func Lcm(m, n int) int {
+	return int(math.Abs(float64(m))) * int(math.Abs(float64(n))) / Gcd(m, n)
 }
 
 // Permutation : 標準の順列関数
 var Permutation = PermutationA
 
 // PermutationA : 順列
-func PermutationA(n, r uint) uint64 {
-	perm := uint64(1)
-	for i := uint(0); i < r && n > i; i++ {
-		perm *= uint64(n - i)
+func PermutationA(n, r int) int64 {
+	if r < 0 || n < r {
+		return 0
+	}
+
+	perm := int64(1)
+	for i := 0; i < r && n > i; i++ {
+		perm *= int64(n - i)
 	}
 	return perm
 }
@@ -40,9 +44,13 @@ func PermutationA(n, r uint) uint64 {
 // PermutationB : 順列
 //
 // 遅い代わりにバカでかい数値も扱える
-func PermutationB(n, r uint) *big.Int {
+func PermutationB(n, r int) *big.Int {
+	if r < 0 || n < r {
+		return big.NewInt(0)
+	}
+
 	res := big.NewInt(1)
-	for i := uint(0); i < r && n > i; i++ {
+	for i := 0; i < r && n > i; i++ {
 		res.Mul(res, big.NewInt(int64(n-i)))
 	}
 	return res
@@ -53,7 +61,10 @@ var Combination = CombinationD
 
 // CombinationA : 組み合わせ
 // nCr = nPr/(r!)
-func CombinationA(n, r uint) uint64 {
+func CombinationA(n, r int) int64 {
+	if n < 0 || r < 0 {
+		return 0
+	}
 	if n <= r {
 		return 1
 	}
@@ -65,12 +76,15 @@ func CombinationA(n, r uint) uint64 {
 	m := PermutationB(n, r)
 	d := PermutationB(r, r)
 	m.Div(m, d)
-	return m.Uint64()
+	return m.Int64()
 }
 
 // CombinationB : 組み合わせ
 // 分数でやる
-func CombinationB(n, r uint) uint64 {
+func CombinationB(n, r int) int64 {
+	if n < 0 || r < 0 {
+		return 0
+	}
 	if n <= r {
 		return 1
 	}
@@ -80,18 +94,21 @@ func CombinationB(n, r uint) uint64 {
 	}
 
 	combi := big.NewRat(1, 1)
-	for i := uint(0); i < r; i++ {
+	for i := 0; i < r; i++ {
 		combi.Mul(combi, big.NewRat(int64(n-i), int64(r-i)))
 	}
 
-	return combi.Num().Uint64()
+	return combi.Num().Int64()
 }
 
 // CombinationC : 組み合わせ
 //
 // nCrには下記の漸化式が成立する。
 //   nCr = (n-1)C(r-1) + (n-1)Cr
-func CombinationC(n, r uint) uint64 {
+func CombinationC(n, r int) int64 {
+	if n < 0 || r < 0 {
+		return 0
+	}
 	if r == 0 || n <= r {
 		return 1
 	}
@@ -107,7 +124,10 @@ func CombinationC(n, r uint) uint64 {
 //
 // 基本的にCombinationAと考え方は同じだが、先に約分できるところはする。
 // （扱う数を小さくしておくことでオーバーフローを防ぐ）
-func CombinationD(n, r uint) uint64 {
+func CombinationD(n, r int) int64 {
+	if n < 0 || r < 0 {
+		return 0
+	}
 	if r == 0 || n <= r {
 		return 1
 	}
@@ -116,9 +136,9 @@ func CombinationD(n, r uint) uint64 {
 		return CombinationD(n, n-r)
 	}
 
-	ns1 := make([]uint, r)
-	ns2 := make([]uint, r)
-	for i := uint(0); i < r; i++ {
+	ns1 := make([]int, r)
+	ns2 := make([]int, r)
+	for i := 0; i < r; i++ {
 		ns1[i] = n - i
 		ns2[i] = r - i
 	}
@@ -135,10 +155,10 @@ func CombinationD(n, r uint) uint64 {
 				continue
 			}
 
-			m := Gcd(int(k), int(d))
+			m := Gcd(k, d)
 			if m != 1 {
-				ns1[j] /= uint(m)
-				d /= uint(m)
+				ns1[j] /= m
+				d /= m
 			}
 
 			if d == 1 {
@@ -147,9 +167,9 @@ func CombinationD(n, r uint) uint64 {
 		}
 	}
 
-	combi := uint64(1)
+	combi := int64(1)
 	for _, m := range ns1 {
-		combi *= uint64(m)
+		combi *= int64(m)
 	}
 
 	return combi
@@ -172,16 +192,16 @@ func Add(a, b string) string {
 	}
 
 	if len(ns1) < l {
-		ns1 = append(make([]uint, l-len(ns1), l), ns1...)
+		ns1 = append(make([]int, l-len(ns1), l), ns1...)
 	}
 
 	if len(ns2) < l {
-		ns2 = append(make([]uint, l-len(ns2), l), ns2...)
+		ns2 = append(make([]int, l-len(ns2), l), ns2...)
 	}
 
 	// 下の桁から和をとっていき、逆順に詰める
-	digits := make([]uint, 0, l)
-	c := uint(0) // 繰り上がり
+	digits := make([]int, 0, l)
+	c := 0 // 繰り上がり
 	for i := l - 1; i >= 0; i-- {
 		d := c
 		d += ns1[i]
@@ -227,8 +247,8 @@ func Mul(a, b string) string {
 			ns1 = append(ns1, 0)
 			continue
 		}
-		c := uint(0)
-		digits := make([]uint, 0, len(ns1))
+		c := 0
+		digits := make([]int, 0, len(ns1))
 		for j := len(ns1) - 1; j >= 0; j-- {
 			m := d*ns1[j] + c
 			m, c = m%10, m/10

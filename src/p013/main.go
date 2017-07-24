@@ -225,7 +225,10 @@ func main() {
 }
 
 // ライブラリ使って普通にやる
-func p013A(nums []string, cnt uint) uint64 {
+func p013A(nums []string, cnt int) int64 {
+	if cnt <= 0 {
+		return 0
+	}
 	bigInt := &big.Int{}
 
 	sum := big.NewInt(0)
@@ -236,15 +239,18 @@ func p013A(nums []string, cnt uint) uint64 {
 		sum = bigInt.Add(sum, n)
 	}
 
-	i, _ := strconv.Atoi(sum.Text(10)[:cnt])
-	return uint64(i)
+	i, _ := strconv.ParseInt(sum.Text(10)[:cnt], 10, 64)
+	return i
 }
 
 // ライブラリを使わずにやる(1)
 //
 // intの最大値を超えているので、1桁ずつ和と繰り上げを出してやっていくしかない
-func p013B(nums []string, cnt uint) uint64 {
+func p013B(nums []string, cnt int) int64 {
 	if len(nums) == 0 {
+		return 0
+	}
+	if cnt <= 0 {
 		return 0
 	}
 
@@ -256,14 +262,14 @@ func p013B(nums []string, cnt uint) uint64 {
 		}
 	}
 
-	ns := make([][]uint, len(nums))
+	ns := make([][]int, len(nums))
 	for i, s := range nums {
 		ds, err := common.SplitNums(s)
 		if err != nil {
 			panic(err)
 		}
 		if len(ds) < maxCnt {
-			ds2 := make([]uint, 0, maxCnt)
+			ds2 := make([]int, 0, maxCnt)
 			for j := 0; j < maxCnt-len(ds); j++ {
 				ds2 = append(ds2, 0)
 			}
@@ -275,8 +281,8 @@ func p013B(nums []string, cnt uint) uint64 {
 	}
 
 	// 下の桁から和をとっていき、逆順に詰める
-	digits := make([]uint, 0, maxCnt)
-	c := uint(0) // 繰り上がり
+	digits := make([]int, 0, maxCnt)
+	c := 0 // 繰り上がり
 	for i := maxCnt - 1; i >= 0; i-- {
 		d := c // 和
 		for _, ds := range ns {
@@ -294,9 +300,9 @@ func p013B(nums []string, cnt uint) uint64 {
 	}
 
 	// 結果を逆順にしながら指定桁数をとる
-	sum := uint64(0)
-	for i := len(digits) - 1; len(digits)-1-i < int(cnt); i-- {
-		sum = sum*10 + uint64(digits[i])
+	sum := int64(0)
+	for i := len(digits) - 1; len(digits)-1-i < cnt; i-- {
+		sum = sum*10 + int64(digits[i])
 	}
 
 	return sum
@@ -305,14 +311,18 @@ func p013B(nums []string, cnt uint) uint64 {
 // ライブラリを使わずにやる(2)
 //
 // さすがにライブラリの方が速い
-func p013C(nums []string, cnt uint) uint64 {
+func p013C(nums []string, cnt int) int64 {
+	if cnt <= 0 {
+		return 0
+	}
+
 	sum := "0"
 	for _, n := range nums {
 		sum = common.Add(sum, n)
 	}
 
-	i, _ := strconv.Atoi(sum[:cnt])
-	return uint64(i)
+	i, _ := strconv.ParseInt(sum[:cnt], 10, 64)
+	return i
 }
 
 // ライブラリを使わずにやる(3)
@@ -323,8 +333,11 @@ func p013C(nums []string, cnt uint) uint64 {
 // つつ足していく。
 //
 // NOTE: 色々なパターンを考慮しすぎ&いい加減に作りすぎてカオス
-func p013D(nums []string, cnt uint) uint64 {
+func p013D(nums []string, cnt int) int64 {
 	if len(nums) == 0 {
+		return 0
+	}
+	if cnt <= 0 {
 		return 0
 	}
 
@@ -337,12 +350,12 @@ func p013D(nums []string, cnt uint) uint64 {
 	}
 
 	count := cnt
-	if uint(maxCnt) < count {
-		count = uint(maxCnt)
+	if maxCnt < count {
+		count = maxCnt
 	}
 
-	l32 := len(strconv.FormatUint(math.MaxUint32, 10))
-	ns := make([][]uint64, 0, len(nums))
+	l32 := len(strconv.FormatInt(math.MaxUint32, 10))
+	ns := make([][]int64, 0, len(nums))
 	lens := []int{}
 	for j, s := range nums {
 		str := make([]byte, 0, maxCnt)
@@ -351,25 +364,25 @@ func p013D(nums []string, cnt uint) uint64 {
 		}
 		str = append(str, s...)
 		// まず先頭のcnt桁を切り出す
-		ms := []uint64{}
-		k, _ := strconv.ParseUint(string(str[0:count]), 10, 64)
+		ms := []int64{}
+		k, _ := strconv.ParseInt(string(str[0:count]), 10, 64)
 		ms = append(ms, k)
 		if j == 0 {
-			lens = append(lens, int(count))
+			lens = append(lens, count)
 		}
 		// 残りを切り出す
-		if len(str) > int(count) {
+		if len(str) > count {
 			str = str[count:]
 			for len(str) > 0 {
 				if len(str) > l32 {
-					k, _ := strconv.ParseUint(string(str[0:l32]), 10, 64)
+					k, _ := strconv.ParseInt(string(str[0:l32]), 10, 64)
 					ms = append(ms, k)
 					if j == 0 {
 						lens = append(lens, l32)
 					}
 					str = str[l32:]
 				} else {
-					k, _ := strconv.ParseUint(string(str), 10, 64)
+					k, _ := strconv.ParseInt(string(str), 10, 64)
 					ms = append(ms, k)
 					if j == 0 {
 						lens = append(lens, len(str))
@@ -382,13 +395,13 @@ func p013D(nums []string, cnt uint) uint64 {
 	}
 
 	// 下の桁から和をとっていく
-	c := uint64(0) // 繰り上がり
+	c := int64(0) // 繰り上がり
 	for i := len(lens) - 1; i >= 1; i-- {
-		d := c // 和
+		d := int64(c) // 和
 		for _, ds := range ns {
 			d += ds[i]
 		}
-		div := uint64(1)
+		div := int64(1)
 		for j := 0; j < lens[i]; j++ {
 			div *= 10
 		}
@@ -399,11 +412,11 @@ func p013D(nums []string, cnt uint) uint64 {
 		sum += ds[0]
 	}
 
-	str := strconv.FormatUint(sum, 10)
+	str := strconv.FormatInt(sum, 10)
 	if len(str) <= int(cnt) {
 		return sum
 	}
 
-	sum, _ = strconv.ParseUint(str[0:cnt], 10, 64)
+	sum, _ = strconv.ParseInt(str[0:cnt], 10, 64)
 	return sum
 }

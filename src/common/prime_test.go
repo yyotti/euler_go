@@ -112,20 +112,20 @@ func BenchmarkPrimeGeneratorB_cached(b *testing.B) {
 }
 
 var primeFactorsTests = []struct {
-	input    uint
-	expected map[uint]uint
+	input    int64
+	expected map[int64]int
 }{
-	{input: 0, expected: map[uint]uint{}},
-	{input: 1, expected: map[uint]uint{}},
-	{input: 2, expected: map[uint]uint{2: 1}},
-	{input: 3, expected: map[uint]uint{3: 1}},
-	{input: 4, expected: map[uint]uint{2: 2}},
-	{input: 5, expected: map[uint]uint{5: 1}},
-	{input: 6, expected: map[uint]uint{2: 1, 3: 1}},
-	{input: 7, expected: map[uint]uint{7: 1}},
-	{input: 8, expected: map[uint]uint{2: 3}},
-	{input: 9, expected: map[uint]uint{3: 2}},
-	{input: 13195, expected: map[uint]uint{5: 1, 7: 1, 13: 1, 29: 1}},
+	{input: 0, expected: map[int64]int{}},
+	{input: 1, expected: map[int64]int{}},
+	{input: 2, expected: map[int64]int{2: 1}},
+	{input: 3, expected: map[int64]int{3: 1}},
+	{input: 4, expected: map[int64]int{2: 2}},
+	{input: 5, expected: map[int64]int{5: 1}},
+	{input: 6, expected: map[int64]int{2: 1, 3: 1}},
+	{input: 7, expected: map[int64]int{7: 1}},
+	{input: 8, expected: map[int64]int{2: 3}},
+	{input: 9, expected: map[int64]int{3: 2}},
+	{input: 13195, expected: map[int64]int{5: 1, 7: 1, 13: 1, 29: 1}},
 }
 
 func TestPrimeFactors(t *testing.T) {

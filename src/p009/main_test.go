@@ -5,17 +5,18 @@ import (
 )
 
 var p009Tests = []struct {
-	input    uint
-	expected []uint
+	input    int
+	expected []int
 }{
-	{input: 0, expected: []uint{}},
-	{input: 1, expected: []uint{}},
-	{input: 3 + 4 + 5, expected: []uint{3 * 4 * 5}},
-	{input: 13, expected: []uint{}},
-	{input: 5 + 12 + 13, expected: []uint{5 * 12 * 13}},
-	{input: 8 + 15 + 17, expected: []uint{8 * 15 * 17}},
-	{input: 6 + 8 + 10, expected: []uint{6 * 8 * 10}},
-	{input: 15 + 36 + 39, expected: []uint{9 * 40 * 41, 15 * 36 * 39}},
+	{input: -1, expected: []int{}},
+	{input: 0, expected: []int{}},
+	{input: 1, expected: []int{}},
+	{input: 3 + 4 + 5, expected: []int{3 * 4 * 5}},
+	{input: 13, expected: []int{}},
+	{input: 5 + 12 + 13, expected: []int{5 * 12 * 13}},
+	{input: 8 + 15 + 17, expected: []int{8 * 15 * 17}},
+	{input: 6 + 8 + 10, expected: []int{6 * 8 * 10}},
+	{input: 15 + 36 + 39, expected: []int{9 * 40 * 41, 15 * 36 * 39}},
 }
 
 func TestP009A(t *testing.T) {

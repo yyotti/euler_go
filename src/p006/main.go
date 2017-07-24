@@ -26,15 +26,15 @@ func main() {
 }
 
 // 問題で言われている通り、それぞれを計算して差をとる
-func p006A(max uint) uint {
-	sum1 := uint(0)
-	sum2 := uint(0)
-	for i := uint(1); i <= max; i++ {
-		sum1 += uint(math.Pow(float64(i), 2))
+func p006A(max int) int {
+	sum1 := 0
+	sum2 := 0
+	for i := 1; i <= max; i++ {
+		sum1 += int(math.Pow(float64(i), 2))
 		sum2 += i
 	}
 
-	return uint(math.Pow(float64(sum2), 2)) - sum1
+	return int(math.Pow(float64(sum2), 2)) - sum1
 }
 
 // 数学で解く
@@ -46,6 +46,10 @@ func p006A(max uint) uint {
 //   (1 + 2 + ... + N)^2 = {N(N+1)/2}^2
 // これらの差をとればいいので、
 //   {N(N+1)/2}^2 - N(N+1)(2N+1)/6 = N(N+1)(N-1)(3N+2)/12
-func p006B(max uint) uint {
+func p006B(max int) int {
+	if max < 0 {
+		return 0
+	}
+
 	return max * (max + 1) * (max - 1) * (3*max + 2) / 12
 }

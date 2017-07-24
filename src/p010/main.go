@@ -17,11 +17,11 @@ func main() {
 }
 
 // 素数ジェネレータで1つ1つ生成して加算する
-func p010A(max uint) uint {
+func p010A(max int) int {
 	gen := common.NewPrimeGenerator()
 
-	sum := uint(0)
-	for p := gen.Next(); p <= max; p = gen.Next() {
+	sum := 0
+	for p := int(gen.Next()); p <= max; p = int(gen.Next()) {
 		sum += p
 	}
 
@@ -29,7 +29,7 @@ func p010A(max uint) uint {
 }
 
 // 最大値が決まっているので、エラトステネスの篩にかける
-func p010B(max uint) uint {
+func p010B(max int) int {
 	if max < 2 {
 		return 0
 	}
@@ -40,8 +40,8 @@ func p010B(max uint) uint {
 	}
 
 	// ふるいにかけつつ足していく
-	sum := uint(0)
-	for i := uint(2); i < max+1; i++ {
+	sum := 0
+	for i := 2; i < max+1; i++ {
 		if !sieve[i] {
 			continue
 		}

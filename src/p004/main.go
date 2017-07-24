@@ -21,7 +21,7 @@ func main() {
 }
 
 // 指定された桁数の数同士を掛け合わせて、回文数になるものの最大値を得る
-func p004A(digit uint) uint {
+func p004A(digit int) int {
 	if digit < 1 {
 		return 0
 	}
@@ -31,10 +31,10 @@ func p004A(digit uint) uint {
 		return 9
 	}
 
-	from := uint(math.Pow10(int(digit) - 1))
-	to := uint(math.Pow10(int(digit)))
+	from := int(math.Pow10(digit - 1))
+	to := int(math.Pow10(digit))
 
-	max := uint(0)
+	max := 0
 	for i := from; i < to; i++ {
 		for j := i; j < to; j++ {
 			k := i * j
@@ -48,12 +48,12 @@ func p004A(digit uint) uint {
 }
 
 // 文字列にして判定する
-func isParindromeA(x uint) bool {
+func isParindromeA(x int) bool {
 	if x < 0 {
 		return false
 	}
 
-	s := strconv.Itoa(int(x))
+	s := strconv.Itoa(x)
 	for i := 0; i <= len(s)/2; i++ {
 		if s[i] != s[len(s)-1-i] {
 			return false
@@ -64,7 +64,7 @@ func isParindromeA(x uint) bool {
 }
 
 // 数字的に桁を反転して判定する
-func isParindromeB(x uint) bool {
+func isParindromeB(x int) bool {
 	if x < 0 {
 		return false
 	}
@@ -72,7 +72,7 @@ func isParindromeB(x uint) bool {
 		return true
 	}
 
-	pn := uint(0)
+	pn := 0
 	for i := x; i > 0; i /= 10 {
 		pn = pn*10 + i%10
 	}
@@ -82,7 +82,7 @@ func isParindromeB(x uint) bool {
 
 // 掛け合わせた結果が2桁以上の回文数になるためには、少なくともどちらか一方が
 // 11の倍数でなければならない
-func p004B(digit uint) uint {
+func p004B(digit int) int {
 	if digit < 1 {
 		return 0
 	}
@@ -92,10 +92,10 @@ func p004B(digit uint) uint {
 		return 9
 	}
 
-	from := uint(math.Pow10(int(digit) - 1))
-	to := uint(math.Pow10(int(digit)))
+	from := int(math.Pow10(digit - 1))
+	to := int(math.Pow10(digit))
 
-	max := uint(0)
+	max := 0
 	// iが11の倍数になるように調整
 	for i := from + (11 - from%11); i < to; i += 11 {
 		for j := from; j < to; j++ {
@@ -110,7 +110,7 @@ func p004B(digit uint) uint {
 }
 
 // p004Bで、max判定を先にした方がisParindromeより速くなるか？
-func p004C(digit uint) uint {
+func p004C(digit int) int {
 	if digit < 1 {
 		return 0
 	}
@@ -120,10 +120,10 @@ func p004C(digit uint) uint {
 		return 9
 	}
 
-	from := uint(math.Pow10(int(digit) - 1))
-	to := uint(math.Pow10(int(digit)))
+	from := int(math.Pow10(digit - 1))
+	to := int(math.Pow10(digit))
 
-	max := uint(0)
+	max := 0
 	// iが11の倍数になるように調整
 	for i := from + (11 - from%11); i < to; i += 11 {
 		for j := from; j < to; j++ {
@@ -138,7 +138,7 @@ func p004C(digit uint) uint {
 }
 
 // 大きい数から順番に計算していって判定する
-func p004D(digit uint) uint {
+func p004D(digit int) int {
 	if digit < 1 {
 		return 0
 	}
@@ -148,11 +148,11 @@ func p004D(digit uint) uint {
 		return 9
 	}
 
-	from := uint(math.Pow10(int(digit) - 1))
-	to := uint(math.Pow10(int(digit))) - 1
+	from := int(math.Pow10(digit - 1))
+	to := int(math.Pow10(digit)) - 1
 
-	max := uint(0)
-	maxJ := uint(0)
+	max := 0
+	maxJ := 0
 	// iが11の倍数になるように調整
 	for i := to - to%11; i >= from; i -= 11 {
 		// iより大きい範囲で調べればいい
@@ -181,7 +181,7 @@ func p004D(digit uint) uint {
 }
 
 // p004D + isParindromeB (最速)
-func p004E(digit uint) uint {
+func p004E(digit int) int {
 	if digit < 1 {
 		return 0
 	}
@@ -191,11 +191,11 @@ func p004E(digit uint) uint {
 		return 9
 	}
 
-	from := uint(math.Pow10(int(digit) - 1))
-	to := uint(math.Pow10(int(digit))) - 1
+	from := int(math.Pow10(digit - 1))
+	to := int(math.Pow10(digit)) - 1
 
-	max := uint(0)
-	maxJ := uint(0)
+	max := 0
+	maxJ := 0
 	// iが11の倍数になるように調整
 	for i := to - to%11; i >= from; i -= 11 {
 		// iより大きい範囲で調べればいい

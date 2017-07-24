@@ -33,23 +33,23 @@ func main() {
 	fmt.Printf("P012B: %d\n", p012B(cnt))
 }
 
-func triangle(n uint) uint {
+func triangle(n int) int {
 	return n * (n + 1) / 2
 }
 
 // 普通に割っていくやつ
-func divisors(n uint) []uint {
+func divisors(n int) []int {
 	if n < 1 {
-		return []uint{1}
+		return []int{1}
 	}
 
-	ds := []uint{}
-	for i := uint(1); i*i <= n; i++ {
+	ds := []int{}
+	for i := 1; i*i <= n; i++ {
 		if n%i == 0 {
 			if n/i == i {
 				ds = append(ds, i)
 			} else {
-				ds = append(ds, []uint{i, n / i}...)
+				ds = append(ds, []int{i, n / i}...)
 			}
 		}
 	}
@@ -57,29 +57,33 @@ func divisors(n uint) []uint {
 	return ds
 }
 
-func p012A(cnt uint) uint {
-	for i := uint(1); ; i++ {
+func p012A(cnt int) int {
+	for i := 1; ; i++ {
 		t := triangle(i)
 		ds := divisors(t)
-		if uint(len(ds)) > cnt {
+		if len(ds) > cnt {
 			return t
 		}
 	}
 }
 
-func divisorsCnt(n uint) uint {
-	pf := common.PrimeFactors(n)
+func divisorsCnt(n int) int {
+	if n < 0 {
+		return 0
+	}
 
-	s := uint(1)
+	pf := common.PrimeFactors(int64(n))
+
+	s := 1
 	for _, c := range pf {
-		s *= (c + 1)
+		s *= c + 1
 	}
 
 	return s
 }
 
-func p012B(cnt uint) uint {
-	for i := uint(1); ; i++ {
+func p012B(cnt int) int {
+	for i := 1; ; i++ {
 		t := triangle(i)
 		if divisorsCnt(t) > cnt {
 			return t

@@ -22,11 +22,11 @@ func main() {
 }
 
 // フィボナッチ数列の第n項を取得する関数を定義してやる
-func p002A(max uint) uint {
-	sum := uint(0)
+func p002A(max int) int {
+	sum := 0
 
-	for i := uint(1); ; i++ {
-		f := fibA(i)
+	for i := 1; ; i++ {
+		f := int(fibA(i))
 		if f > max {
 			break
 		}
@@ -38,7 +38,10 @@ func p002A(max uint) uint {
 	return sum
 }
 
-func fibA(n uint) uint {
+func fibA(n int) uint {
+	if n < 1 {
+		return 0
+	}
 	if n == 1 {
 		return 1
 	} else if n == 2 {
@@ -49,34 +52,34 @@ func fibA(n uint) uint {
 }
 
 // フィボナッチ数列をあらかじめ生成しておいてから足す
-func p002B(max uint) uint {
+func p002B(max int) int {
 	fibs := fibB(max)
 	if len(fibs) < 2 {
 		return 0
 	}
 
-	sum := uint(0)
+	sum := 0
 	for _, f := range fibs {
 		if f%2 == 0 {
-			sum += f
+			sum += int(f)
 		}
 	}
 
 	return sum
 }
 
-func fibB(max uint) []uint {
+func fibB(max int) []int {
 	if max < 1 {
-		return []uint{0}
+		return []int{0}
 	}
 	if max < 2 {
-		return []uint{0, 1}
+		return []int{0, 1}
 	}
 
-	fibs := []uint{0, 1, 2} // 初項の0はインデックスをずらすためのダミー
+	fibs := []int{0, 1, 2} // 初項の0はインデックスをずらすためのダミー
 
-	a := uint(2)
-	f := uint(3)
+	a := 2
+	f := 3
 	for f <= max {
 		fibs = append(fibs, f)
 		a, f = f, f+a
@@ -86,13 +89,13 @@ func fibB(max uint) []uint {
 }
 
 // フィボナッチ数列を生成しながら足す
-func p002C(max uint) uint {
+func p002C(max int) int {
 	if max < 2 {
 		return 0
 	}
 
-	sum := uint(0)
-	for a, f := uint(1), uint(2); f <= max; a, f = f, a+f {
+	sum := 0
+	for a, f := 1, 2; f <= max; a, f = f, a+f {
 		if f%2 == 0 {
 			sum += f
 		}
@@ -102,6 +105,7 @@ func p002C(max uint) uint {
 }
 
 // フィボナッチ数列ジェネレータ
+// FIXME リークする可能性があるので後で直す
 type fibonacciGenerator struct {
 	ch chan uint
 }
@@ -130,16 +134,16 @@ func (g *fibonacciGenerator) Next() uint {
 }
 
 // フィボナッチ数列ジェネレータを使って足していく
-func p002D(max uint) uint {
+func p002D(max int) int {
 	gen := newFibonacciGenerator()
 	// 今回は初項が1、第2項は2なので、先頭から2つ落とす
 	gen.Next()
 	gen.Next()
 
-	sum := uint(0)
-	for f := gen.Next(); f <= max; f = gen.Next() {
+	sum := 0
+	for f := gen.Next(); int(f) <= max; f = gen.Next() {
 		if f%2 == 0 {
-			sum += f
+			sum += int(f)
 		}
 	}
 

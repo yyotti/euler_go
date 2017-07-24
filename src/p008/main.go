@@ -65,27 +65,27 @@ func main() {
 	fmt.Printf("P008D: %d\n", p008D(count))
 }
 
-func product(nums []uint) uint {
+func product(nums []int) int64 {
 	if len(nums) == 0 {
 		return 0
 	}
 
-	p := uint(1)
+	p := int64(1)
 	for _, n := range nums {
-		p *= n
+		p *= int64(n)
 	}
 	return p
 }
 
 // 数字を先頭から見ていって全パターンで積をとり、その最大値を得る
-func p008A(cnt uint) uint {
+func p008A(cnt int) int64 {
 	if cnt < 1 {
 		return 0
 	}
 
-	max := uint(0)
-	for i := 0; i <= len(num)-int(cnt); i++ {
-		nums, err := common.SplitNums(num[i : i+int(cnt)])
+	max := int64(0)
+	for i := 0; i <= len(num)-cnt; i++ {
+		nums, err := common.SplitNums(num[i : i+cnt])
 		if err != nil {
 			panic(err)
 		}
@@ -102,20 +102,20 @@ func p008A(cnt uint) uint {
 // 0が入れば数字の積は0になるので、13文字の中に0が入る場合は除外してよい。
 // まず文字列を0で分割し、0を含まないそれぞれの区間ごとで指定された文字数の積
 // をとる。
-func p008B(cnt uint) uint {
+func p008B(cnt int) int64 {
 	if cnt < 1 {
 		return 0
 	}
 
 	parts := strings.Split(num, "0")
-	max := uint(0)
+	max := int64(0)
 	for _, part := range parts {
-		if len(part) < int(cnt) {
+		if len(part) < cnt {
 			continue
 		}
 
-		for i := 0; i <= len(part)-int(cnt); i++ {
-			nums, err := common.SplitNums(part[i : i+int(cnt)])
+		for i := 0; i <= len(part)-cnt; i++ {
+			nums, err := common.SplitNums(part[i : i+cnt])
 			if err != nil {
 				panic(err)
 			}
@@ -132,25 +132,25 @@ func p008B(cnt uint) uint {
 
 // ロジックはAのまま、非同期にやる
 // ->やってる処理が軽すぎて、かえって遅くなった
-func p008C(cnt uint) uint {
+func p008C(cnt int) int64 {
 	if cnt < 1 {
 		return 0
 	}
 
-	max := uint(0)
+	max := int64(0)
 
-	ch := make(chan uint, len(num)-int(cnt)+1)
+	ch := make(chan int64, len(num)-cnt+1)
 	done := make(chan struct{})
 	defer close(done)
 
-	go func(ch chan<- uint) {
+	go func(ch chan<- int64) {
 		w := &sync.WaitGroup{}
-		w.Add(len(num) - int(cnt) + 1)
-		for i := 0; i <= len(num)-int(cnt); i++ {
+		w.Add(len(num) - cnt + 1)
+		for i := 0; i <= len(num)-cnt; i++ {
 			go func(i int) {
 				defer w.Done()
 
-				nums, err := common.SplitNums(num[i : i+int(cnt)])
+				nums, err := common.SplitNums(num[i : i+cnt])
 				if err != nil {
 					panic(err)
 				}
@@ -162,7 +162,7 @@ func p008C(cnt uint) uint {
 		close(ch)
 	}(ch)
 
-	go func(ch <-chan uint, done chan<- struct{}) {
+	go func(ch <-chan int64, done chan<- struct{}) {
 		for n := range ch {
 			if max < n {
 				max = n
@@ -179,22 +179,22 @@ func p008C(cnt uint) uint {
 // ロジックはBのまま、非同期にやる
 // ->Cよりは速いけど、結局Bの方が速い
 // ->ちなみにsync.Mutexを使う方がchannelより速い
-func p008D(cnt uint) uint {
+func p008D(cnt int) int64 {
 	if cnt < 1 {
 		return 0
 	}
 
-	max := uint(0)
+	max := int64(0)
 
-	ch := make(chan uint, len(num)-int(cnt)+1)
+	ch := make(chan int64, len(num)-cnt+1)
 	done := make(chan struct{})
 	defer close(done)
 
-	go func(ch chan<- uint) {
+	go func(ch chan<- int64) {
 		parts := strings.Split(num, "0")
 		w := &sync.WaitGroup{}
 		for _, part := range parts {
-			if len(part) < int(cnt) {
+			if len(part) < cnt {
 				continue
 			}
 
@@ -203,12 +203,12 @@ func p008D(cnt uint) uint {
 				defer w.Done()
 
 				wg := &sync.WaitGroup{}
-				wg.Add(len(part) - int(cnt) + 1)
-				for i := 0; i <= len(part)-int(cnt); i++ {
+				wg.Add(len(part) - cnt + 1)
+				for i := 0; i <= len(part)-cnt; i++ {
 					go func(i int) {
 						defer wg.Done()
 
-						nums, err := common.SplitNums(part[i : i+int(cnt)])
+						nums, err := common.SplitNums(part[i : i+cnt])
 						if err != nil {
 							panic(err)
 						}
@@ -223,7 +223,7 @@ func p008D(cnt uint) uint {
 		close(ch)
 	}(ch)
 
-	go func(ch <-chan uint, done chan<- struct{}) {
+	go func(ch <-chan int64, done chan<- struct{}) {
 		for n := range ch {
 			if max < n {
 				max = n
