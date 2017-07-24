@@ -66,11 +66,17 @@ func (g *primeGeneratorA) Next() uint {
 }
 
 // PrimeFactors : 素因数分解
-func PrimeFactors(n int64) map[int64]int {
+func PrimeFactors(n int64, gen ...PrimeGenerator) map[int64]int {
 	pCounts := map[int64]int{}
-	gen := NewPrimeGenerator()
+	var g PrimeGenerator
+	if len(gen) == 0 {
+		g = NewPrimeGenerator()
+	} else {
+		g = gen[0]
+		g.Reset()
+	}
 	k := n
-	for i := int64(gen.Next()); i < math.MaxUint32 && i*i <= n; i = int64(gen.Next()) {
+	for i := int64(g.Next()); i < math.MaxUint32 && i*i <= n; i = int64(g.Next()) {
 		for k%i == 0 {
 			cnt, ok := pCounts[i]
 			if ok {
@@ -90,40 +96,37 @@ func PrimeFactors(n int64) map[int64]int {
 	return pCounts
 }
 
-var primes []uint
-var primeMax uint
-var mutex *sync.Mutex
-
-func init() {
-	primes = make([]uint, 0, 1000)
-	primes = append(primes, 2, 3)
-	primeMax = 3
-
-	mutex = &sync.Mutex{}
-}
-
 // キャッシュを使う実装
 type primeGeneratorB struct {
-	idx int
+	primes   []uint
+	primeMax uint
+	mutex    *sync.Mutex
+	idx      int
 }
 
 func (g *primeGeneratorB) start() {
 	g.idx = 0
+
+	g.primes = make([]uint, 0, 1000)
+	g.primes = append(g.primes, 2, 3)
+	g.primeMax = 3
+
+	g.mutex = &sync.Mutex{}
 }
 
 // Next : 次の素数を取得する
 func (g *primeGeneratorB) Next() uint {
-	mutex.Lock()
-	defer mutex.Unlock()
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
 
 	var p uint
-	if g.idx < len(primes) {
-		p = primes[g.idx]
+	if g.idx < len(g.primes) {
+		p = g.primes[g.idx]
 	} else {
-		i := primeMax + 2
+		i := g.primeMax + 2
 		for ; ; i += 2 {
 			isPrime := true
-			for _, p := range primes {
+			for _, p := range g.primes {
 				if p*p > i {
 					break
 				}
@@ -133,8 +136,8 @@ func (g *primeGeneratorB) Next() uint {
 				}
 			}
 			if isPrime {
-				primes = append(primes, i)
-				primeMax = i
+				g.primes = append(g.primes, i)
+				g.primeMax = i
 				break
 			}
 		}

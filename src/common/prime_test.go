@@ -2,7 +2,6 @@ package common
 
 import (
 	"reflect"
-	"sync"
 	"testing"
 )
 
@@ -36,13 +35,6 @@ func TestPrimeGeneratorA_start(t *testing.T) {
 func newPrimeGeneratorB() *primeGeneratorB {
 	gen := &primeGeneratorB{}
 	gen.start()
-
-	// キャッシュをクリアする
-	primes = make([]uint, 0, 1000)
-	primes = append(primes, 2, 3)
-	primeMax = 3
-
-	mutex = &sync.Mutex{}
 
 	return gen
 }
@@ -88,11 +80,11 @@ func TestPrimeGeneratorB_Reset(t *testing.T) {
 	if gen.idx != 0 {
 		t.Errorf("Expected 0 but got %d", gen.idx)
 	}
-	if primeMax != 29 {
-		t.Errorf("Expected 29 but got %d", primeMax)
+	if gen.primeMax != 29 {
+		t.Errorf("Expected 29 but got %d", gen.primeMax)
 	}
-	if len(primes) != 10 {
-		t.Errorf("Expected 10 but got %d", len(primes))
+	if len(gen.primes) != 10 {
+		t.Errorf("Expected 10 but got %d", len(gen.primes))
 	}
 
 	n := gen.Next()
@@ -134,36 +126,64 @@ func BenchmarkPrimeGeneratorB_cached(b *testing.B) {
 }
 
 var primeFactorsTests = []struct {
-	input    int64
+	inN      int64
+	inGen    []PrimeGenerator
 	expected map[int64]int
 }{
-	{input: 0, expected: map[int64]int{}},
-	{input: 1, expected: map[int64]int{}},
-	{input: 2, expected: map[int64]int{2: 1}},
-	{input: 3, expected: map[int64]int{3: 1}},
-	{input: 4, expected: map[int64]int{2: 2}},
-	{input: 5, expected: map[int64]int{5: 1}},
-	{input: 6, expected: map[int64]int{2: 1, 3: 1}},
-	{input: 7, expected: map[int64]int{7: 1}},
-	{input: 8, expected: map[int64]int{2: 3}},
-	{input: 9, expected: map[int64]int{3: 2}},
-	{input: 13195, expected: map[int64]int{5: 1, 7: 1, 13: 1, 29: 1}},
+	{inN: 0, expected: map[int64]int{}},
+	{inN: 1, expected: map[int64]int{}},
+	{inN: 2, expected: map[int64]int{2: 1}},
+	{inN: 3, expected: map[int64]int{3: 1}},
+	{inN: 4, expected: map[int64]int{2: 2}},
+	{inN: 5, expected: map[int64]int{5: 1}},
+	{inN: 6, expected: map[int64]int{2: 1, 3: 1}},
+	{inN: 7, expected: map[int64]int{7: 1}},
+	{inN: 8, expected: map[int64]int{2: 3}},
+	{inN: 9, expected: map[int64]int{3: 2}},
+	{inN: 13195, expected: map[int64]int{5: 1, 7: 1, 13: 1, 29: 1}},
+	{inN: 13195, inGen: []PrimeGenerator{}, expected: map[int64]int{5: 1, 7: 1, 13: 1, 29: 1}},
+	// {{{
+	{
+		inN: 13195,
+		inGen: []PrimeGenerator{
+			func() PrimeGenerator {
+				g := newPrimeGeneratorB()
+				for g.Next() < 30 {
+				}
+				return g
+			}(),
+		},
+		expected: map[int64]int{5: 1, 7: 1, 13: 1, 29: 1}},
+	// }}}
 }
 
 func TestPrimeFactors(t *testing.T) {
 	for _, tt := range primeFactorsTests {
-		actual := PrimeFactors(tt.input)
+		var actual map[int64]int
+		if len(tt.inGen) != 0 {
+			actual = PrimeFactors(tt.inN, tt.inGen...)
+		} else {
+			actual = PrimeFactors(tt.inN)
+		}
 		if !reflect.DeepEqual(actual, tt.expected) {
-			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+			t.Errorf("%d: Expected %v but got %v", tt.inN, tt.expected, actual)
 		}
 	}
 }
 
 func BenchmarkPrimeFactors(b *testing.B) {
-	// キャッシュをリセット
-	newPrimeGeneratorB()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		PrimeFactors(3628800) // 1 x 2 x ... x 10
+	}
+}
+
+func BenchmarkPrimeFactors_Cached(b *testing.B) {
+	g := newPrimeGeneratorB()
+	for g.Next() < 20 {
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		PrimeFactors(3628800, g) // 1 x 2 x ... x 10
 	}
 }
