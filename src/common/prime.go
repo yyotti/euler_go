@@ -9,6 +9,7 @@ import (
 type PrimeGenerator interface {
 	start()
 	Next() uint
+	Reset()
 }
 
 // NewPrimeGenerator : PrimeGeneratorコンストラクタ
@@ -141,4 +142,9 @@ func (g *primeGeneratorB) Next() uint {
 	}
 	g.idx++
 	return p
+}
+
+// Reset : 生成する素数を最初に戻す
+func (g *primeGeneratorB) Reset() {
+	g.idx = 0
 }

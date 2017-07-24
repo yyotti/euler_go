@@ -78,6 +78,29 @@ func TestPrimeGeneratorB_Next(t *testing.T) {
 	}
 }
 
+func TestPrimeGeneratorB_Reset(t *testing.T) {
+	gen := newPrimeGeneratorB()
+	for i := 0; i < 10; i++ {
+		gen.Next()
+	}
+
+	gen.Reset()
+	if gen.idx != 0 {
+		t.Errorf("Expected 0 but got %d", gen.idx)
+	}
+	if primeMax != 29 {
+		t.Errorf("Expected 29 but got %d", primeMax)
+	}
+	if len(primes) != 10 {
+		t.Errorf("Expected 10 but got %d", len(primes))
+	}
+
+	n := gen.Next()
+	if n != 2 {
+		t.Errorf("Expected 2 but got %d", n)
+	}
+}
+
 func BenchmarkPrimeGeneratorA(b *testing.B) {
 	gen := &primeGeneratorA{ch: make(chan uint)}
 	go gen.start()
@@ -98,13 +121,12 @@ func BenchmarkPrimeGeneratorB(b *testing.B) {
 func BenchmarkPrimeGeneratorB_cached(b *testing.B) {
 	// 10000未満の素数をあらかじめキャッシュしておく
 	b.N = 10000
-	genPre := newPrimeGeneratorB()
+	gen := newPrimeGeneratorB()
 	for i := 0; i < b.N; i++ {
-		genPre.Next()
+		gen.Next()
 	}
 
-	gen := &primeGeneratorB{}
-	gen.start()
+	gen.Reset()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		gen.Next()
