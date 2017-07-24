@@ -3,6 +3,7 @@ package common
 import (
 	"math/big"
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -284,5 +285,33 @@ func TestMul(t *testing.T) {
 		if actual != tt.expected {
 			t.Errorf("%s+%s: Expected %s but got %s", tt.inA, tt.inB, tt.expected, actual)
 		}
+	}
+}
+
+var divisorsTests = []struct {
+	input    int
+	expected []int
+}{
+	{input: 0, expected: []int{1}},
+	{input: 1, expected: []int{1}},
+	{input: 2, expected: []int{1, 2}},
+	{input: 3, expected: []int{1, 3}},
+	{input: 4, expected: []int{1, 2, 4}},
+	{input: 24, expected: []int{1, 2, 3, 4, 6, 8, 12, 24}},
+}
+
+func TestDivisors(t *testing.T) {
+	for _, tt := range divisorsTests {
+		actual := Divisors(tt.input)
+		sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+		}
+	}
+}
+
+func BenchmarkDivisors(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Divisors(3628800) // 1 x 2 x ... x 10
 	}
 }

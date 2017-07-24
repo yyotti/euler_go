@@ -37,30 +37,10 @@ func triangle(n int) int {
 	return n * (n + 1) / 2
 }
 
-// 普通に割っていくやつ
-func divisors(n int) []int {
-	if n < 1 {
-		return []int{1}
-	}
-
-	ds := []int{}
-	for i := 1; i*i <= n; i++ {
-		if n%i == 0 {
-			if n/i == i {
-				ds = append(ds, i)
-			} else {
-				ds = append(ds, []int{i, n / i}...)
-			}
-		}
-	}
-
-	return ds
-}
-
 func p012A(cnt int) int {
 	for i := 1; ; i++ {
 		t := triangle(i)
-		ds := divisors(t)
+		ds := common.Divisors(t)
 		if len(ds) > cnt {
 			return t
 		}

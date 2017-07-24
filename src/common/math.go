@@ -271,3 +271,23 @@ func Mul(a, b string) string {
 
 	return mul
 }
+
+// Divisors : 約数
+func Divisors(n int) []int {
+	if n < 1 {
+		return []int{1}
+	}
+
+	ds := []int{}
+	for i := 1; i*i <= n; i++ {
+		if n%i == 0 {
+			if n/i == i {
+				ds = append(ds, i)
+			} else {
+				ds = append(ds, []int{i, n / i}...)
+			}
+		}
+	}
+
+	return ds
+}
