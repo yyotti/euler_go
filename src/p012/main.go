@@ -67,12 +67,12 @@ func p012A(cnt int) int {
 	}
 }
 
-func divisorsCnt(n int) int {
+func divisorsCnt(n int, gen common.PrimeGenerator) int {
 	if n < 0 {
 		return 0
 	}
 
-	pf := common.PrimeFactors(int64(n))
+	pf := common.PrimeFactors(int64(n), gen)
 
 	s := 1
 	for _, c := range pf {
@@ -83,9 +83,10 @@ func divisorsCnt(n int) int {
 }
 
 func p012B(cnt int) int {
+	gen := common.NewPrimeGenerator()
 	for i := 1; ; i++ {
 		t := triangle(i)
-		if divisorsCnt(t) > cnt {
+		if divisorsCnt(t, gen) > cnt {
 			return t
 		}
 	}

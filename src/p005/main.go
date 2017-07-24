@@ -25,8 +25,9 @@ func p005A(max int) int {
 	}
 
 	pf := map[int64]int{}
+	gen := common.NewPrimeGenerator()
 	for i := 1; i <= max; i++ {
-		for n, c := range common.PrimeFactors(int64(i)) {
+		for n, c := range common.PrimeFactors(int64(i), gen) {
 			cnt, ok := pf[n]
 			if !ok || cnt < c {
 				pf[n] = c

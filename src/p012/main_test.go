@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"sort"
 	"testing"
+
+	"github.com/yyotti/euler_go/src/common"
 )
 
 var triangleTests = []struct {
@@ -92,7 +94,8 @@ var divisorsCntTests = []struct {
 
 func TestDivisorsCnt(t *testing.T) {
 	for _, tt := range divisorsCntTests {
-		actual := divisorsCnt(tt.input)
+		gen := common.NewPrimeGenerator()
+		actual := divisorsCnt(tt.input, gen)
 		if actual != tt.expected {
 			t.Errorf("%d: Expected %d but got %d", tt.input, tt.expected, actual)
 		}
@@ -106,8 +109,9 @@ func BenchmarkDivisors(b *testing.B) {
 }
 
 func BenchmarkDivisorsCnt(b *testing.B) {
+	gen := common.NewPrimeGenerator()
 	for i := 0; i < b.N; i++ {
-		divisorsCnt(3628800) // 1 x 2 x ... x 10
+		divisorsCnt(3628800, gen) // 1 x 2 x ... x 10
 	}
 }
 
