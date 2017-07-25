@@ -100,7 +100,7 @@ var p024Tests = []struct {
 func TestP024A(t *testing.T) {
 	for _, tt := range p024Tests {
 		actual := p024A(tt.inNums, tt.inN)
-		if !reflect.DeepEqual(actual, tt.expected) {
+		if actual != tt.expected {
 			t.Errorf("(%v,%d): Expected %d but got %d", tt.inNums, tt.inN, tt.expected, actual)
 		}
 	}
@@ -109,7 +109,7 @@ func TestP024A(t *testing.T) {
 func TestP024B(t *testing.T) {
 	for _, tt := range p024Tests {
 		actual := p024B(tt.inNums, tt.inN)
-		if !reflect.DeepEqual(actual, tt.expected) {
+		if actual != tt.expected {
 			t.Errorf("(%v,%d): Expected %d but got %d", tt.inNums, tt.inN, tt.expected, actual)
 		}
 	}
