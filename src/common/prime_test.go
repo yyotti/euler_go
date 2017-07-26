@@ -187,3 +187,75 @@ func BenchmarkPrimeFactors_Cached(b *testing.B) {
 		PrimeFactors(3628800, g) // 1 x 2 x ... x 10
 	}
 }
+
+var isPrimeTests = []struct {
+	input    uint
+	expected bool
+}{
+	{input: 0, expected: false},
+	{input: 1, expected: false},
+	{input: 2, expected: true},
+	{input: 3, expected: true},
+	{input: 4, expected: false},
+	{input: 5, expected: true},
+	{input: 6, expected: false},
+	{input: 7, expected: true},
+	{input: 8, expected: false},
+	{input: 9, expected: false},
+	{input: 10, expected: false},
+	{input: 11, expected: true},
+}
+
+func TestIsPrime(t *testing.T) {
+	for _, tt := range isPrimeTests {
+		actual := IsPrime(tt.input)
+		if actual != tt.expected {
+			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+		}
+	}
+}
+
+var sieveTests = []struct {
+	input    uint
+	expected []uint
+}{
+	{input: 0, expected: []uint{}},
+	{input: 1, expected: []uint{}},
+	{input: 2, expected: []uint{2}},
+	{input: 3, expected: []uint{2, 3}},
+	{input: 4, expected: []uint{2, 3}},
+	{input: 5, expected: []uint{2, 3, 5}},
+	{input: 6, expected: []uint{2, 3, 5}},
+	{input: 7, expected: []uint{2, 3, 5, 7}},
+	{input: 50, expected: []uint{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47}},
+}
+
+func TestSieveA(t *testing.T) {
+	for _, tt := range sieveTests {
+		actual := sieveA(tt.input)
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+		}
+	}
+}
+
+func TestSieveB(t *testing.T) {
+	for _, tt := range sieveTests {
+		actual := sieveB(tt.input)
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+		}
+	}
+}
+
+func BenchmarkSieveA(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		sieveA(10000)
+	}
+}
+
+func BenchmarkSieveB(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		sieveB(10000)
+	}
+}

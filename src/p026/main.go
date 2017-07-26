@@ -197,26 +197,13 @@ func p026C(d int) int {
 
 	// まずエラトステネスの篩にかけて素数を列挙する
 	// 初期値をtrueとするのが無駄なのでfalseの場合に素数とする
-	primes := []int{}
-	sieve := make([]bool, d)
-	for i := 2; i < len(sieve); i++ {
-		if sieve[i] {
-			continue
-		}
-
-		if i != 2 && i != 5 {
-			primes = append(primes, i)
-		}
-		for j := 2 * i; j < len(sieve); j += i {
-			sieve[j] = true
-		}
-	}
+	primes := common.Primes(uint(d - 1))
 
 	// 素数を逆順に調べていく
 	maxLen := 0
 	maxI := 0
 	for i := len(primes) - 1; i >= 0; i-- {
-		p := primes[i]
+		p := int(primes[i])
 
 		// p-1 の約数を得る
 		divisors := common.Divisors(p - 1)
@@ -253,28 +240,13 @@ func p026D(d int) int {
 		return 0
 	}
 
-	// まずエラトステネスの篩にかけて素数を列挙する
-	// 初期値をtrueとするのが無駄なのでfalseの場合に素数とする
-	primes := []int{}
-	sieve := make([]bool, d)
-	for i := 2; i < len(sieve); i++ {
-		if sieve[i] {
-			continue
-		}
-
-		if i != 2 && i != 5 {
-			primes = append(primes, i)
-		}
-		for j := 2 * i; j < len(sieve); j += i {
-			sieve[j] = true
-		}
-	}
+	primes := common.Primes(uint(d) - 1)
 
 	// 素数を逆順に調べていく
 	maxLen := 0
 	maxI := 0
 	for i := len(primes) - 1; i >= 0; i-- {
-		p := primes[i]
+		p := int(primes[i])
 		recLen := len(rec(p))
 		if maxLen < recLen {
 			maxLen = recLen

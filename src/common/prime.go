@@ -151,3 +151,87 @@ func (g *primeGeneratorB) Next() uint {
 func (g *primeGeneratorB) Reset() {
 	g.idx = 0
 }
+
+// IsPrime : 素数判定
+func IsPrime(n uint, gen ...PrimeGenerator) bool {
+	if n < 2 {
+		return false
+	}
+
+	var g PrimeGenerator
+	if len(gen) == 0 {
+		g = NewPrimeGenerator()
+	} else {
+		g = gen[0]
+		g.Reset()
+	}
+
+	for p := g.Next(); p*p <= n; p = g.Next() {
+		if n%p == 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Primes : max以下の素数を得る
+var Primes = sieveA
+
+func sieveA(max uint) []uint {
+	if max < 2 {
+		return []uint{}
+	}
+
+	// 初期値でtrueを設定するのが無駄なので、trueなら素数「ではない」とする
+	sieve := make([]bool, max+1)
+
+	primes := make([]uint, 0, max)
+	for i := uint(2); i <= max; i++ {
+		if sieve[i] {
+			continue
+		}
+
+		primes = append(primes, i)
+
+		for j := 2 * i; j < max+1; j += i {
+			sieve[j] = true
+		}
+	}
+
+	return primes
+}
+
+func sieveB(max uint) []uint {
+	if max < 2 {
+		return []uint{}
+	}
+
+	primes := make([]uint, 0, max)
+	primes = append(primes, 2)
+	ms := map[uint]uint{}
+	for n := uint(3); n <= max; n += 2 {
+		f, ok := ms[n]
+		if ok {
+			// fがあるなら、nはf/2の倍数なので素数ではない
+			delete(ms, n)
+		} else {
+			// 後に追加する倍数を奇数に限定するための調整
+			f = n * 2
+		}
+
+		// 新たな倍数を追加
+		for newN := n + f; ; newN += f {
+			if _, ok := ms[newN]; !ok {
+				ms[newN] = f
+				break
+			}
+		}
+
+		if !ok {
+			primes = append(primes, n)
+		}
+	}
+
+	return primes
+}
