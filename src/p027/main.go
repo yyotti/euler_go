@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/yyotti/euler_go/src/common"
 )
@@ -113,7 +112,7 @@ func p027B(max int) int {
 			break
 		}
 
-		for a := -2 * int(math.Sqrt(float64(b))); a < 0; a++ {
+		for a := -1; a*a < 4*b; a-- {
 			n := 0
 			for ; n < b; n++ {
 				m := uint(n*n + a*n + b)

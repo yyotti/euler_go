@@ -12,8 +12,6 @@ var p027Tests = []struct {
 	{input: 0, expected: 0},
 	{input: 1, expected: 0},
 	{input: 2, expected: -2},
-	{input: 3, expected: -6},
-	{input: 4, expected: -6},
 	{input: 41, expected: -41},
 	{input: 42, expected: -41},
 	{input: 50, expected: -235},
