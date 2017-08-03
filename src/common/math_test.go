@@ -315,3 +315,82 @@ func BenchmarkDivisors(b *testing.B) {
 		Divisors(3628800) // 1 x 2 x ... x 10
 	}
 }
+
+var permutationNTests = []struct {
+	inNums   []int
+	inN      int
+	expected []int
+}{
+	{inNums: []int{}, inN: 0, expected: []int{}},
+	{inNums: []int{}, inN: 1, expected: []int{}},
+	{inNums: []int{0}, inN: 0, expected: []int{}},
+	{inNums: []int{0}, inN: 1, expected: []int{0}},
+	{inNums: []int{0}, inN: 2, expected: []int{}},
+	{inNums: []int{1, 2}, inN: 1, expected: []int{1, 2}},
+	{inNums: []int{1, 2}, inN: 2, expected: []int{2, 1}},
+	{inNums: []int{0, 1, 2}, inN: 0, expected: []int{}},
+	{inNums: []int{0, 1, 2}, inN: 1, expected: []int{0, 1, 2}},
+	{inNums: []int{0, 1, 2}, inN: 2, expected: []int{0, 2, 1}},
+	{inNums: []int{0, 1, 2}, inN: 3, expected: []int{1, 0, 2}},
+	{inNums: []int{0, 1, 2}, inN: 4, expected: []int{1, 2, 0}},
+	{inNums: []int{0, 1, 2}, inN: 5, expected: []int{2, 0, 1}},
+	{inNums: []int{0, 1, 2}, inN: 6, expected: []int{2, 1, 0}},
+	{inNums: []int{0, 1, 2}, inN: 7, expected: []int{}},
+}
+
+func TestPermutationN(t *testing.T) {
+	for _, tt := range permutationNTests {
+		actual := NthPermutation(tt.inNums, tt.inN)
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("%v,%d: Expected %v but got %v", tt.inNums, tt.inN, tt.expected, actual)
+		}
+	}
+}
+
+func BenchmarkPermutationN(b *testing.B) {
+	nums := []int{0, 1, 2, 3, 4, 5}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		NthPermutation(nums, 120)
+	}
+}
+
+var factoradicTests = []struct {
+	input    int
+	expected []int
+}{
+	{input: -1, expected: nil},
+	{input: 0, expected: []int{}},
+	{input: 1, expected: []int{1}},
+	{input: 2, expected: []int{1, 0}},
+	{input: 3, expected: []int{1, 1}},
+	{input: 4, expected: []int{2, 0}},
+	{input: 5, expected: []int{2, 1}},
+	{input: 6, expected: []int{1, 0, 0}},
+	{input: 7, expected: []int{1, 0, 1}},
+	{input: 8, expected: []int{1, 1, 0}},
+	{input: 9, expected: []int{1, 1, 1}},
+	{input: 10, expected: []int{1, 2, 0}},
+	{input: 11, expected: []int{1, 2, 1}},
+	{input: 12, expected: []int{2, 0, 0}},
+	{input: 13, expected: []int{2, 0, 1}},
+	{input: 14, expected: []int{2, 1, 0}},
+	{input: 15, expected: []int{2, 1, 1}},
+	{input: 16, expected: []int{2, 2, 0}},
+	{input: 17, expected: []int{2, 2, 1}},
+	{input: 18, expected: []int{3, 0, 0}},
+	{input: 19, expected: []int{3, 0, 1}},
+	{input: 20, expected: []int{3, 1, 0}},
+	{input: 21, expected: []int{3, 1, 1}},
+	{input: 22, expected: []int{3, 2, 0}},
+	{input: 23, expected: []int{3, 2, 1}},
+}
+
+func TestFactoradic(t *testing.T) {
+	for _, tt := range factoradicTests {
+		actual := factoradic(tt.input)
+		if !reflect.DeepEqual(actual, tt.expected) {
+			t.Errorf("%d: Expected %d but got %d", tt.input, tt.expected, actual)
+		}
+	}
+}

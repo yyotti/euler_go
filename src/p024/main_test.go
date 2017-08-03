@@ -35,46 +35,6 @@ func BenchmarkPermutations(b *testing.B) {
 	}
 }
 
-var factoradicTests = []struct {
-	input    int
-	expected []int
-}{
-	{input: -1, expected: nil},
-	{input: 0, expected: []int{}},
-	{input: 1, expected: []int{1}},
-	{input: 2, expected: []int{1, 0}},
-	{input: 3, expected: []int{1, 1}},
-	{input: 4, expected: []int{2, 0}},
-	{input: 5, expected: []int{2, 1}},
-	{input: 6, expected: []int{1, 0, 0}},
-	{input: 7, expected: []int{1, 0, 1}},
-	{input: 8, expected: []int{1, 1, 0}},
-	{input: 9, expected: []int{1, 1, 1}},
-	{input: 10, expected: []int{1, 2, 0}},
-	{input: 11, expected: []int{1, 2, 1}},
-	{input: 12, expected: []int{2, 0, 0}},
-	{input: 13, expected: []int{2, 0, 1}},
-	{input: 14, expected: []int{2, 1, 0}},
-	{input: 15, expected: []int{2, 1, 1}},
-	{input: 16, expected: []int{2, 2, 0}},
-	{input: 17, expected: []int{2, 2, 1}},
-	{input: 18, expected: []int{3, 0, 0}},
-	{input: 19, expected: []int{3, 0, 1}},
-	{input: 20, expected: []int{3, 1, 0}},
-	{input: 21, expected: []int{3, 1, 1}},
-	{input: 22, expected: []int{3, 2, 0}},
-	{input: 23, expected: []int{3, 2, 1}},
-}
-
-func TestFactoradic(t *testing.T) {
-	for _, tt := range factoradicTests {
-		actual := factoradic(tt.input)
-		if !reflect.DeepEqual(actual, tt.expected) {
-			t.Errorf("%d: Expected %d but got %d", tt.input, tt.expected, actual)
-		}
-	}
-}
-
 var p024Tests = []struct {
 	inNums   []int
 	inN      int
