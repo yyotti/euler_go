@@ -19,3 +19,14 @@ func SplitNums(s string) ([]int, error) {
 
 	return nums, nil
 }
+
+// IsParindrome : 回文判定
+func IsParindrome(s string) bool {
+	for i := 0; i <= len(s)/2; i++ {
+		if s[i] != s[len(s)-1-i] {
+			return false
+		}
+	}
+
+	return true
+}

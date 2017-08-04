@@ -394,3 +394,37 @@ func TestFactoradic(t *testing.T) {
 		}
 	}
 }
+
+var isParindromeNumTests = []struct {
+	input    int
+	expected bool
+}{
+	{input: 0, expected: true},
+	{input: 1, expected: true},
+	{input: 9, expected: true},
+	{input: 10, expected: false},
+	{input: 11, expected: true},
+	{input: 12, expected: false},
+	{input: 21, expected: false},
+	{input: 22, expected: true},
+	{input: 100, expected: false},
+	{input: 101, expected: true},
+	{input: 111, expected: true},
+	{input: 112, expected: false},
+	{input: 121, expected: true},
+	{input: 1001, expected: true},
+	{input: 1010, expected: false},
+	{input: 2022, expected: false},
+	{input: 3303, expected: false},
+	{input: 4444, expected: true},
+	{input: 4554, expected: true},
+}
+
+func TestIsParindromeNum(t *testing.T) {
+	for _, tt := range isParindromeNumTests {
+		actual := IsParindromeNum(tt.input)
+		if actual != tt.expected {
+			t.Errorf("%d: Expected %v but got %v", tt.input, tt.expected, actual)
+		}
+	}
+}

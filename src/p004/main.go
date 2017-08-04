@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+
+	"github.com/yyotti/euler_go/src/common"
 )
 
 const digitCount = 3
@@ -61,23 +63,6 @@ func isParindromeA(x int) bool {
 	}
 
 	return true
-}
-
-// 数字的に桁を反転して判定する
-func isParindromeB(x int) bool {
-	if x < 0 {
-		return false
-	}
-	if x < 10 {
-		return true
-	}
-
-	pn := 0
-	for i := x; i > 0; i /= 10 {
-		pn = pn*10 + i%10
-	}
-
-	return x == pn
 }
 
 // 掛け合わせた結果が2桁以上の回文数になるためには、少なくともどちらか一方が
@@ -202,7 +187,7 @@ func p004E(digit int) int {
 		j := to
 		for ; j >= i; j-- {
 			k := j * i
-			if max < k && isParindromeB(k) {
+			if max < k && common.IsParindromeNum(k) {
 				// maxが変わった時点でそれ以下のjでは見つかるわけがないので切る
 				max = k
 				break
